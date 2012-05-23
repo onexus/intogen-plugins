@@ -1,0 +1,195 @@
+package org.intogen.pages;
+
+import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.*;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.Response;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.util.convert.ConversionException;
+import org.onexus.core.ICollectionManager;
+import org.onexus.core.IEntity;
+import org.onexus.core.IResourceManager;
+import org.onexus.core.query.Contains;
+import org.onexus.core.query.Query;
+import org.onexus.core.resources.Collection;
+import org.onexus.core.resources.Field;
+import org.onexus.core.utils.EntityIterator;
+import org.onexus.core.utils.QueryUtils;
+import org.onexus.core.utils.ResourceUtils;
+import org.onexus.ui.website.pages.Page;
+import org.onexus.ui.website.utils.EntityModel;
+
+import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
+public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
+
+    @Inject
+    public ICollectionManager collectionManager;
+
+    @Inject
+    public IResourceManager resourceManager;
+
+    public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {
+        super(componentId, statusModel);
+
+        //TODO remove this stuff
+        SearchType genes = new SearchType();
+        genes.setCollection("0.1/genes");
+        genes.setFields("SYMBOL, GENEID, REFSEQID");
+        getConfig().setTypes(Arrays.asList( new SearchType[] { genes }));
+        getStatus().setType(genes);
+
+        add(new Image("logo", new PackageResourceReference(SearchPage.class, "logo.png")));
+
+        Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(new PropertyModel<SearchPageStatus>(this, "status")));
+
+        form.add(new DropDownChoice<SearchType>("type", getConfig().getTypes(), new SearchTypeRenderer()));
+
+
+        TextField<String> search = new TextField<String>("search");
+
+        search.add(new AutoCompleteBehavior<IEntity>(new EntityRenderer(), new AutoCompleteSettings()) {
+
+            @Override
+            protected Iterator<IEntity> getChoices(String input) {
+                return getAutocompleteChoices(input);
+            }
+
+        });
+
+        form.add(search);
+
+        add(form);
+
+    }
+
+    private Iterator<IEntity> getAutocompleteChoices(String input) {
+
+        Query query = new Query();
+        SearchType type = getStatus().getType();
+
+        String collectionUri = getAbsoluteUri(type.getCollection());
+        String collectionAlias = QueryUtils.newCollectionAlias(query, collectionUri);
+        query.setFrom(collectionAlias);
+
+        List<String> fieldList = type.getFieldsList();
+        query.addSelect(collectionAlias, fieldList);
+
+        for (String field : fieldList) {
+            QueryUtils.or(query, new Contains(collectionAlias, field, input));
+        }
+
+        query.setCount(10);
+
+        return new EntityIterator(collectionManager.load(query), collectionUri);
+    }
+
+    private String getAbsoluteUri(String partialUri) {
+        String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
+        return ResourceUtils.getAbsoluteURI(baseUri, partialUri);
+    }
+
+
+    private class SearchTypeRenderer implements IChoiceRenderer<SearchType> {
+
+        @Override
+        public Object getDisplayValue(SearchType type) {
+
+            String collectionUri = type.getCollection();
+
+            Collection collection = resourceManager.load(Collection.class, getAbsoluteUri(collectionUri));
+
+            if (collection==null) {
+                return collectionUri;
+            }
+
+            return collection.getName();
+        }
+
+        @Override
+        public String getIdValue(SearchType object, int index) {
+            return Integer.toString(index);
+        }
+    }
+
+    /**
+     * Generic IEntity renderer that show all the fields.
+     */
+    private class EntityRenderer implements IAutoCompleteRenderer<IEntity> {
+
+        public final void render(final IEntity object, final Response response, final String criteria)
+        {
+            String textValue = getTextValue(object, criteria);
+            if (textValue == null)
+            {
+                throw new IllegalStateException(
+                        "A call to textValue(Object) returned an illegal value: null for object: " +
+                                object.toString());
+            }
+            textValue = textValue.replaceAll("\\\"", "&quot;");
+
+            response.write("<li textvalue=\"" + textValue + "\"");
+            response.write(">");
+            renderChoice(object, response, criteria);
+            response.write("</li>");
+        }
+
+        private String getTextValue(IEntity object, String criteria) {
+
+            SearchType type = getStatus().getType();
+            Iterator<String> it = type.getFieldsList().iterator();
+
+            for (String field : type.getFieldsList()) {
+                String value = String.valueOf(object.get(field));
+
+                if (StringUtils.containsIgnoreCase(value, criteria)) {
+                    return value;
+                }
+            }
+
+            return object.getId();
+        }
+
+        public final void renderHeader(final Response response)
+        {
+            response.write("<ul>");
+        }
+
+        public final void renderFooter(final Response response, int count)
+        {
+            response.write("</ul>");
+        }
+
+        protected void renderChoice(IEntity object, Response response, String criteria) {
+
+            SearchType type = getStatus().getType();
+            Iterator<String> it = type.getFieldsList().iterator();
+
+            for (String field : type.getFieldsList()) {
+                String value = String.valueOf(object.get(field));
+
+                if (StringUtils.containsIgnoreCase(value, criteria)) {
+                    String hlValue = value.replaceAll("(?i)(" + criteria + ")", "<strong>$1</strong>");
+                    response.write( "<span class='f'>" + field.toLowerCase() + ":</span>" + hlValue);
+                    response.write("<br />");
+                }
+
+            }
+        }
+
+
+    }
+
+
+
+}

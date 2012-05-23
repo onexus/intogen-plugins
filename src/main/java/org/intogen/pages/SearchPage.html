@@ -1,0 +1,18 @@
+<html xmlns:wicket>
+<wicket:panel>
+    <div id="logo">
+        <img wicket:id="logo" src="" />
+        <form wicket:id="form" id="search">
+            <select wicket:id="type" name="type">
+                <option>Genes</option>
+                <option>Tissue</option>
+                <option>Study</option>
+                <option>Pathway</option>
+            </select>
+            <input wicket:id="search" type="text" maxlength="2048" name="q" autocomplete="off" title="Search" value="" dir="ltr" spellcheck="false">
+            <button name="search" type="submit" value="Search"></button>
+        </form>
+    </div>
+</wicket:panel>
+</html>
+  

@@ -1,0 +1,68 @@
+#logo {
+    margin: 50px auto;
+    width: 400px;
+    height: 400px;
+}
+
+#logo img {
+    margin: 15px 18px; 
+}
+
+#search select {
+    background: none repeat scroll 0 0 transparent;
+    border: 1px solid #FF7634;
+    float: left;
+    font-size: 16px;
+    height: 34px;
+    margin: 5px;
+    padding: 5px;
+    width: 100px;
+}
+#search input {
+    background: none repeat scroll 0 0 transparent;
+    border: 1px solid #FF7634;
+    float: left;
+    height: 34px;
+    margin: 5px;
+    padding: 5px;
+    width: 220px;
+}
+#search button {
+    background: url("bt-search.png") no-repeat scroll center center #FF7634;
+    border: 1px solid #FF7634;
+    float: left;
+    height: 34px;
+    margin: 5px;
+    padding: 5px;
+    width: 40px;
+}
+
+div.wicket-aa {
+    background-color: white;
+    border-width: 1px;
+    border-color: #cccccc;
+    border-style: solid;
+    padding: 2px;
+    margin: 1px 0 0 0;
+    text-align:left;
+}
+
+div.wicket-aa ul {
+    list-style:none;
+    padding: 2px;
+    margin:0;
+}
+
+div.wicket-aa li {
+    padding: 4px;
+}
+
+div.wicket-aa li span.f {
+    color: #666;
+}
+
+div.wicket-aa ul li.selected {
+    background-color: #FFFF00;
+    padding: 2px;
+    margin:0;
+}
