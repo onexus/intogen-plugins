@@ -1,6 +1,9 @@
 package org.intogen.pages;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.*;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -42,18 +45,23 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
     public SearchPage(String componentId, IModel<SearchPageStatus> statusModel) {
         super(componentId, statusModel);
 
-        //TODO remove this stuff
-        SearchType genes = new SearchType();
-        genes.setCollection("0.1/genes");
-        genes.setFields("SYMBOL, GENEID, REFSEQID");
-        getConfig().setTypes(Arrays.asList( new SearchType[] { genes }));
-        getStatus().setType(genes);
-
         add(new Image("logo", new PackageResourceReference(SearchPage.class, "logo.png")));
 
         Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(new PropertyModel<SearchPageStatus>(this, "status")));
 
-        form.add(new DropDownChoice<SearchType>("type", getConfig().getTypes(), new SearchTypeRenderer()));
+        // By default use the first search type
+        List<SearchType> types = getConfig().getTypes();
+        if (getStatus().getType() == null && !types.isEmpty()) {
+            getStatus().setType(types.get(0));
+        }
+
+        DropDownChoice<SearchType> typeSelect = new DropDownChoice<SearchType>("type", types, new SearchTypeRenderer());
+        typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+            }
+        });
+        form.add(typeSelect);
 
 
         TextField<String> search = new TextField<String>("search");
@@ -147,9 +155,9 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         private String getTextValue(IEntity object, String criteria) {
 
             SearchType type = getStatus().getType();
-            Iterator<String> it = type.getFieldsList().iterator();
+            List<String> fields = type.getKeysList();
 
-            for (String field : type.getFieldsList()) {
+            for (String field : fields) {
                 String value = String.valueOf(object.get(field));
 
                 if (StringUtils.containsIgnoreCase(value, criteria)) {
@@ -173,18 +181,36 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         protected void renderChoice(IEntity object, Response response, String criteria) {
 
             SearchType type = getStatus().getType();
-            Iterator<String> it = type.getFieldsList().iterator();
+            List<String> keys = type.getKeysList();
+            List<String> fields = type.getFieldsList();
 
-            for (String field : type.getFieldsList()) {
+
+            boolean keyFieldAdded = false;
+            for (String field : fields) {
                 String value = String.valueOf(object.get(field));
 
                 if (StringUtils.containsIgnoreCase(value, criteria)) {
-                    String hlValue = value.replaceAll("(?i)(" + criteria + ")", "<strong>$1</strong>");
-                    response.write( "<span class='f'>" + field.toLowerCase() + ":</span>" + hlValue);
-                    response.write("<br />");
-                }
+                    if (keys.contains(field)) {
+                        keyFieldAdded = true;
+                    }
 
+                    renderValue(response, value, criteria, field);
+
+                }
             }
+
+            if (!keyFieldAdded) {
+                String field = keys.get(0);
+                String value = String.valueOf(object.get(field));
+                renderValue(response, value, criteria, field);
+            }
+        }
+
+        private void renderValue(Response response, String value, String criteria, String field ) {
+
+            String hlValue = value.replaceAll("(?i)(" + criteria + ")", "<strong>$1</strong>");
+            response.write( "<span class='f'>" + field.toLowerCase() + ":</span>" + hlValue);
+            response.write("<br />");
         }
 
 
