@@ -5,17 +5,20 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.*;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.convert.ConversionException;
+import org.intogen.boxes.BoxesPanel;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
 import org.onexus.core.IResourceManager;
@@ -47,7 +50,13 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         add(new Image("logo", new PackageResourceReference(SearchPage.class, "logo.png")));
 
-        Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(new PropertyModel<SearchPageStatus>(this, "status")));
+        Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(new PropertyModel<SearchPageStatus>(this, "status"))) {
+            @Override
+            protected void onSubmit() {
+                String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
+                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri));
+            }
+        };
 
         // By default use the first search type
         List<SearchType> types = getConfig().getTypes();
@@ -78,6 +87,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         form.add(search);
 
         add(form);
+
+        add(new EmptyPanel("boxes"));
 
     }
 
