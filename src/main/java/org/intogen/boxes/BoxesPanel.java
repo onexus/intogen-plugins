@@ -1,5 +1,6 @@
 package org.intogen.boxes;
 
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.intogen.pages.SearchPageStatus;
@@ -25,6 +26,7 @@ public class BoxesPanel extends Panel {
 
     public BoxesPanel(String id, SearchPageStatus status, String baseUri) {
         super(id);
+        setOutputMarkupId(true);
 
         SearchType type = status.getType();
         String collectionUri = ResourceUtils.getAbsoluteURI(baseUri, type.getCollection());
@@ -33,8 +35,14 @@ public class BoxesPanel extends Panel {
 
         RepeatingView boxes = new RepeatingView("boxes");
 
+        long size = 0;
         while (table.next()) {
             boxes.add(new EntitySelectBox(boxes.newChildId(), table.getEntity(collectionUri)));
+            size++;
+        }
+
+        if (size == 1) {
+            boxes.add(new Label(boxes.newChildId(), "DETAIL BOXES"));
         }
 
         add(boxes);
@@ -55,7 +63,7 @@ public class BoxesPanel extends Panel {
             QueryUtils.or(query, new Contains(collectionAlias, field, search));
         }
 
-        query.setCount(1);
+        query.setCount(10);
 
         return collectionManager.load(query);
     }

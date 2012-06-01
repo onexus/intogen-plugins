@@ -46,6 +46,7 @@ public class EntitySelectBox extends Panel {
     @Override
     protected void onInitialize() {
         PageParameters parameters = new PageParameters(getPage().getPageParameters());
+        parameters.set("onexus-page", "browser");
         add(new BookmarkablePageLink<String>("link", Website.class, parameters) );
         super.onInitialize();
     }

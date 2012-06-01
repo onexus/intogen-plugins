@@ -68,6 +68,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                SearchPage.this.addOrReplace(new EmptyPanel("boxes").setOutputMarkupId(true));
+                target.add(SearchPage.this.get("boxes"));
             }
         });
         form.add(typeSelect);
@@ -88,7 +90,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         add(form);
 
-        add(new EmptyPanel("boxes"));
+        add(new EmptyPanel("boxes").setOutputMarkupId(true));
 
     }
 
@@ -164,6 +166,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         }
 
         private String getTextValue(IEntity object, String criteria) {
+
 
             SearchType type = getStatus().getType();
             List<String> fields = type.getKeysList();
