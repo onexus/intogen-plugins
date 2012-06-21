@@ -134,7 +134,8 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 return collectionUri;
             }
 
-            return collection.getName();
+            String title = collection.getTitle();
+            return (title == null ? collection.getName() : title);
         }
 
         @Override
@@ -179,7 +180,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                 }
             }
 
-            return object.getId();
+            return String.valueOf(object.get(fields.get(0)));
         }
 
         public final void renderHeader(final Response response)
