@@ -68,7 +68,6 @@
      height: 34px;
      margin: 5px;
      padding: 5px;
-     width: 220px;
 }
 
 #search button {
@@ -110,3 +109,16 @@ div.wicket-aa ul li.selected {
      margin: 0pt;
      padding: 2px;
 }
+#boxes {
+   padding-bottom: 100px;
+}
+
+.footer {
+   position: fixed;
+   bottom: 0px;
+   width: 96%;
+   background-color: white;
+   height: 30px;
+
+}
+
