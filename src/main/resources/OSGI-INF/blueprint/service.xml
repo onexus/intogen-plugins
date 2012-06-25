@@ -6,4 +6,8 @@
         <bean class="org.intogen.pages.SearchPageCreator"/>
     </service>
 
+    <service interface="org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.intogen.decorators.ImpactDecoratorCreator"/>
+    </service>
+
 </blueprint>
