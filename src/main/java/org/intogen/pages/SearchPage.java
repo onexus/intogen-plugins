@@ -1,23 +1,28 @@
 package org.intogen.pages;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.extensions.ajax.markup.html.autocomplete.*;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteSettings;
+import org.apache.wicket.extensions.ajax.markup.html.autocomplete.IAutoCompleteRenderer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.resource.PackageResourceReference;
-import org.apache.wicket.util.convert.ConversionException;
 import org.intogen.boxes.BoxesPanel;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntity;
@@ -25,15 +30,14 @@ import org.onexus.core.IResourceManager;
 import org.onexus.core.query.Contains;
 import org.onexus.core.query.Query;
 import org.onexus.core.resources.Collection;
-import org.onexus.core.resources.Field;
 import org.onexus.core.utils.EntityIterator;
 import org.onexus.core.utils.QueryUtils;
 import org.onexus.core.utils.ResourceUtils;
 import org.onexus.ui.website.pages.Page;
-import org.onexus.ui.website.utils.EntityModel;
 
 import javax.inject.Inject;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -50,7 +54,9 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         add(new Image("logo", new PackageResourceReference(SearchPage.class, "logo.png")));
 
-        Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(new PropertyModel<SearchPageStatus>(this, "status"))) {
+        IModel<SearchPageStatus> pageStatusModel = new PropertyModel<SearchPageStatus>(this, "status");
+
+        Form form = new Form<SearchPageStatus>("form", new CompoundPropertyModel<SearchPageStatus>(pageStatusModel)) {
             @Override
             protected void onSubmit() {
                 String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
@@ -64,18 +70,9 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             getStatus().setType(types.get(0));
         }
 
-        DropDownChoice<SearchType> typeSelect = new DropDownChoice<SearchType>("type", types, new SearchTypeRenderer());
-        typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                SearchPage.this.addOrReplace(new EmptyPanel("boxes").setOutputMarkupId(true));
-                target.add(SearchPage.this.get("boxes"));
-            }
-        });
-        form.add(typeSelect);
 
-
-        TextField<String> search = new TextField<String>("search");
+        final TextField<String> search = new TextField<String>("search");
+        search.setOutputMarkupId(true);
 
         search.add(new AutoCompleteBehavior<IEntity>(new EntityRenderer(), new AutoCompleteSettings()) {
 
@@ -85,10 +82,49 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             }
 
         });
-
         form.add(search);
 
+        DropDownChoice<SearchType> typeSelect = new DropDownChoice<SearchType>("type", types, new SearchTypeRenderer());
+        typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                SearchPage.this.addOrReplace(new EmptyPanel("boxes").setOutputMarkupId(true));
+                getStatus().setSearch("");
+                target.add(search);
+                target.add(SearchPage.this.get("examplesContainer"));
+                target.add(SearchPage.this.get("boxes"));
+            }
+        });
+        form.add(typeSelect);
+
         add(form);
+
+        WebMarkupContainer examples = new WebMarkupContainer("examplesContainer");
+        examples.setOutputMarkupId(true);
+        examples.add(new ListView<String>("examples", new ExamplesModel(new PropertyModel<SearchType>(pageStatusModel, "type"))) {
+
+            @Override
+            protected void populateItem(ListItem<String> item) {
+
+                AjaxLink<String> link = new AjaxLink<String>("link", item.getModel()) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        getStatus().setSearch(getModelObject());
+                        target.add(search);
+                    }
+                };
+
+                link.add(new Label("label", item.getModel()));
+                item.add(link);
+
+                WebMarkupContainer sep = new WebMarkupContainer("sep");
+                sep.setVisible(item.getIndex() + 1 != getModelObject().size());
+                item.add(sep);
+
+            }
+        });
+
+        add(examples);
 
         add(new EmptyPanel("boxes").setOutputMarkupId(true));
 
@@ -130,7 +166,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
             Collection collection = resourceManager.load(Collection.class, getAbsoluteUri(collectionUri));
 
-            if (collection==null) {
+            if (collection == null) {
                 return collectionUri;
             }
 
@@ -149,11 +185,9 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
      */
     private class EntityRenderer implements IAutoCompleteRenderer<IEntity> {
 
-        public final void render(final IEntity object, final Response response, final String criteria)
-        {
+        public final void render(final IEntity object, final Response response, final String criteria) {
             String textValue = getTextValue(object, criteria);
-            if (textValue == null)
-            {
+            if (textValue == null) {
                 throw new IllegalStateException(
                         "A call to textValue(Object) returned an illegal value: null for object: " +
                                 object.toString());
@@ -183,13 +217,11 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             return String.valueOf(object.get(fields.get(0)));
         }
 
-        public final void renderHeader(final Response response)
-        {
+        public final void renderHeader(final Response response) {
             response.write("<ul>");
         }
 
-        public final void renderFooter(final Response response, int count)
-        {
+        public final void renderFooter(final Response response, int count) {
             response.write("</ul>");
         }
 
@@ -221,10 +253,10 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             }
         }
 
-        private void renderValue(Response response, String value, String criteria, String field ) {
+        private void renderValue(Response response, String value, String criteria, String field) {
 
             String hlValue = value.replaceAll("(?i)(" + criteria + ")", "<strong>$1</strong>");
-            response.write( "<span class='f'>" + field.toLowerCase() + ":</span>" + hlValue);
+            response.write("<span class='f'>" + field.toLowerCase() + ":</span>" + hlValue);
             response.write("<br />");
         }
 
@@ -232,5 +264,29 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
     }
 
 
+    private class ExamplesModel extends AbstractReadOnlyModel<List<String>> {
+
+        private IModel<SearchType> model;
+
+        private ExamplesModel(IModel<SearchType> model) {
+            this.model = model;
+        }
+
+        @Override
+        public List<String> getObject() {
+
+            SearchType searchType = model.getObject();
+
+            if (searchType == null || searchType.getExamples() == null) {
+                return Collections.EMPTY_LIST;
+            }
+
+            List<String> values = new ArrayList<String>();
+            for (String value : searchType.getExamples().split(",")) {
+                values.add(value.trim());
+            }
+            return values;
+        }
+    }
 
 }

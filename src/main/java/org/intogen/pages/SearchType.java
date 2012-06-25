@@ -12,6 +12,7 @@ public class SearchType implements Serializable {
     private String collection;
     private String fields;
     private String keys;
+    private String examples;
 
     public String getCollection() {
         return collection;
@@ -35,6 +36,14 @@ public class SearchType implements Serializable {
 
     public void setKeys(String keys) {
         this.keys = keys;
+    }
+
+    public String getExamples() {
+        return examples;
+    }
+
+    public void setExamples(String examples) {
+        this.examples = examples;
     }
 
     public List<String> getKeysList() {
