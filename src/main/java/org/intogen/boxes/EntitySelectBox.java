@@ -1,54 +1,111 @@
 package org.intogen.boxes;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.util.string.StringValue;
+import org.intogen.pages.SearchLink;
+import org.intogen.pages.SearchPageStatus;
+import org.intogen.pages.SearchType;
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
-import org.onexus.ui.website.Website;
 
 public class EntitySelectBox extends Panel {
 
-    private String entityId;
+    private transient int position;
+    private transient IEntity entity;
+    private transient SearchPageStatus status;
 
-    public EntitySelectBox(String id, IEntity entity) {
+    public EntitySelectBox(String id, int position, SearchPageStatus status, IEntity entity) {
         super(id);
 
-        this.entityId = entity.getId();
-
-        add(new Label("label", StringUtils.replace(entityId, "\t", "-")));
-
-        Collection collection = entity.getCollection();
-
-        StringBuilder description = new StringBuilder();
-        description.append("<ul>");
-        for (Field field : collection.getFields()) {
-
-            if (field.isPrimaryKey() != null && field.isPrimaryKey()) {
-                continue;
-            }
-
-            Object value = entity.get(field.getId());
-            if (value != null && !StringUtils.isEmpty(value.toString())) {
-                description.append("<li><span class=\"f\">").append(field.getLabel()).append(":</span>");
-                description.append(StringUtils.abbreviate(value.toString(), 100)).append("</li>");
-            }
-        }
-        description.append("</ul>");
-
-        add(new Label("description", description.toString()).setEscapeModelStrings(false).setRenderBodyOnly(true));
+        this.position = position;
+        this.status = status;
+        this.entity = entity;
 
     }
 
     @Override
     protected void onInitialize() {
-        PageParameters parameters = new PageParameters(getPage().getPageParameters());
-        parameters.set("onexus-page", "browser");
-        add(new BookmarkablePageLink<String>("link", Website.class, parameters) );
         super.onInitialize();
+
+        // Prepare accordion containers
+        WebMarkupContainer accordionToggle = new WebMarkupContainer("accordion-toggle");
+        WebMarkupContainer accordionBody = new WebMarkupContainer("accordion-body");
+        String bodyId = getMarkupId() + "-body";
+        accordionBody.setMarkupId(bodyId);
+        accordionToggle.add(new AttributeModifier("href", "#" + bodyId));
+        if (position == 0) {
+            accordionBody.add(new AttributeModifier("class", "accordion-body in collapse"));
+        }
+        add(accordionToggle);
+        add(accordionBody);
+
+        // Label
+        Collection collection = entity.getCollection();
+        String labelField = collection.getProperty("FIXED_ENTITY_FIELD");
+
+        String label = (labelField == null ?
+                StringUtils.replace(entity.getId(), "\t", "-") :
+                String.valueOf(entity.get(labelField))
+        );
+        accordionToggle.add(new Label("label", label));
+
+        // Fields values
+        RepeatingView fields = new RepeatingView("fields");
+        for (Field field : collection.getFields()) {
+
+            if (labelField != null && labelField.equals(field.getId())) {
+                continue;
+            }
+
+            Object value = entity.get(field.getId());
+            if (value != null && !StringUtils.isEmpty(value.toString())) {
+
+                WebMarkupContainer fc = new WebMarkupContainer(fields.newChildId());
+                fc.setRenderBodyOnly(true);
+                fc.add(new Label("label", field.getLabel()).add(new AttributeModifier("title", field.getTitle())));
+                fc.add(new Label("value", StringUtils.abbreviate(value.toString(), 50)));
+                fields.add(fc);
+            }
+        }
+        accordionBody.add(fields);
+
+        // Prepare links variables
+        SearchType searchType = status.getType();
+        String entityId = entity.getId();
+
+        // Links
+        RepeatingView links = new RepeatingView("links");
+
+        if (searchType.getLinks()!=null) {
+            for (SearchLink searchLink : searchType.getLinks()) {
+                WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
+                WebMarkupContainer link = new WebMarkupContainer("link");
+                link.add(new AttributeModifier("href", createLink(searchLink.getUrl(), searchType.getCollection(), entityId)));
+                link.add(new Label("label", searchLink.getTitle()));
+                item.add(link);
+                links.add(item);
+            }
+        }
+        accordionBody.add(links);
     }
 
+    private String createLink(String url, String collection, String entityId) {
+
+        String link = "../" + url;
+        link = link.replace("$collection", collection);
+        link = link.replace("$entity", entityId);
+
+        StringValue uri = getPage().getPageParameters().get("uri");
+        if (!uri.isEmpty()) {
+            link = link + "&uri=" + uri.toString();
+        }
+
+        return link;
+    }
 }

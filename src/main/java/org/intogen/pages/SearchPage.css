@@ -12,42 +12,8 @@
      width: 600px;
 }
 
-#boxes div.box {
-     background: none repeat scroll 0% 0% #F9F9F9;
-     border-radius: 4px 4px 4px 4px;
-     border: 1px solid #D8D8D8;
-     margin: 0pt 0pt 20px;
-     padding: 10px;
-}
-
-#boxes div.box a {
-     font-size: medium;
-}
-
-#boxes div.box div.browse {
-     float: right;
-}
-
-#boxes div.box strong {
-     font-size: medium;
-}
-
-#boxes div.box span.f {
-     color: #666666;
-}
-
-#boxes div.box ul {
-     list-style: none outside none;
-     margin: 15px 0px 0px 0px;
-     padding: 0px;
-}
-
-#boxes div.box li {
-     background-color: white;
-     border-radius: 4px 4px 4px 4px;
-     border: 1px solid #D8D8D8;
-     margin: 3px;
-     padding: 3px 10px;
+#boxes .well {
+    margin: 15px; padding: 10px 15px 2px 15px;
 }
 
 .examples {

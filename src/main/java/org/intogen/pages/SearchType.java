@@ -1,5 +1,6 @@
 package org.intogen.pages;
 
+import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -13,6 +14,10 @@ public class SearchType implements Serializable {
     private String fields;
     private String keys;
     private String examples;
+
+    @XStreamImplicit( itemFieldName = "link" )
+    private List<SearchLink> links = new ArrayList<SearchLink>();
+
 
     public String getCollection() {
         return collection;
@@ -44,6 +49,14 @@ public class SearchType implements Serializable {
 
     public void setExamples(String examples) {
         this.examples = examples;
+    }
+
+    public List<SearchLink> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<SearchLink> links) {
+        this.links = links;
     }
 
     public List<String> getKeysList() {

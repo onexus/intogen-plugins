@@ -1,13 +1,12 @@
 package org.intogen.boxes;
 
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.intogen.pages.SearchPageStatus;
 import org.intogen.pages.SearchType;
 import org.onexus.core.ICollectionManager;
 import org.onexus.core.IEntityTable;
-import org.onexus.core.IResourceManager;
 import org.onexus.core.query.Contains;
 import org.onexus.core.query.Query;
 import org.onexus.core.utils.QueryUtils;
@@ -21,12 +20,10 @@ public class BoxesPanel extends Panel {
     @Inject
     public ICollectionManager collectionManager;
 
-    @Inject
-    public IResourceManager resourceManager;
-
     public BoxesPanel(String id, SearchPageStatus status, String baseUri) {
         super(id);
-        setOutputMarkupId(true);
+        setMarkupId("boxes");
+        add(new AttributeModifier("class", "accordion"));
 
         SearchType type = status.getType();
         String collectionUri = ResourceUtils.getAbsoluteURI(baseUri, type.getCollection());
@@ -35,14 +32,10 @@ public class BoxesPanel extends Panel {
 
         RepeatingView boxes = new RepeatingView("boxes");
 
-        long size = 0;
+        int position = 0;
         while (table.next()) {
-            boxes.add(new EntitySelectBox(boxes.newChildId(), table.getEntity(collectionUri)));
-            size++;
-        }
-
-        if (size == 1) {
-            boxes.add(new Label(boxes.newChildId(), "DETAIL BOXES"));
+            boxes.add(new EntitySelectBox(boxes.newChildId(), position, status, table.getEntity(collectionUri)));
+            position++;
         }
 
         add(boxes);
@@ -63,7 +56,7 @@ public class BoxesPanel extends Panel {
             QueryUtils.or(query, new Contains(collectionAlias, field, search));
         }
 
-        query.setCount(10);
+        query.setCount(20);
 
         return collectionManager.load(query);
     }

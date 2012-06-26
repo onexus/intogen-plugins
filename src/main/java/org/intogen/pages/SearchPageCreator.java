@@ -21,10 +21,9 @@ public class SearchPageCreator extends AbstractPageCreator<SearchPageConfig, Sea
     public void register(IResourceRegister resourceRegister) {
         super.register(resourceRegister);
 
-        resourceRegister.addAutoComplete(WebsiteConfig.class, "pages",
-                "        <search>\n" +
-                "               <id>search</id>\n" +
-                "               <label>Search</label>\n" +
-                "        </search>");
+       resourceRegister.register(SearchPageStatus.class);
+       resourceRegister.register(SearchPageStatus.class);
+       resourceRegister.register(SearchType.class);
+       resourceRegister.register(SearchLink.class);
     }
 }

@@ -18,6 +18,7 @@ public class SearchPageConfig extends PageConfig {
     @XStreamImplicit( itemFieldName = "type" )
     private List<SearchType> types = new ArrayList<SearchType>();
 
+
     public SearchPageConfig() {
         super();
     }
