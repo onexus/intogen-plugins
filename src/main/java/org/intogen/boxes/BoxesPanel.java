@@ -50,7 +50,7 @@ public class BoxesPanel extends Panel {
         query.setFrom(collectionAlias);
 
         List<String> fieldList = type.getFieldsList();
-        query.addSelect(collectionAlias, fieldList);
+        query.addSelect(collectionAlias, null);
 
         for (String field : fieldList) {
             QueryUtils.or(query, new Contains(collectionAlias, field, search));
