@@ -17,31 +17,8 @@ public class ImpactDecorator extends FieldDecorator {
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer, String componentId, IModel<IEntity> data) {
-
-        Object value = getValue(data.getObject());
-
-        String label = "";
-
-        if (value != null) {
-            int val = (Integer) value;
-            switch (val) {
-                case 4:
-                    label = "<span class=\"label label-important\">High</span>";
-                    break;
-                case 3:
-                    label = "<span class=\"label label-warning\">Medium</span>";
-                    break;
-                case 2:
-                    label = "<span class=\"label label-info\">Low</span>";
-                    break;
-                default:
-                    label = "<span class=\"label label-success\">None</span>";
-            }
-        }
-
-        cellContainer.add(new Label(componentId, label).setEscapeModelStrings(false));
+        cellContainer.add(new ImpactButton(componentId, data));
         cellContainer.add(new AttributeModifier("class", Model.of("st")));
-
     }
 
 }
