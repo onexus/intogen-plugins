@@ -1,5 +1,6 @@
 package org.intogen.boxes;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -13,6 +14,15 @@ import org.intogen.pages.SearchType;
 import org.onexus.core.IEntity;
 import org.onexus.core.resources.Collection;
 import org.onexus.core.resources.Field;
+import org.onexus.core.utils.ResourceUtils;
+import org.onexus.ui.website.pages.browser.FilterEntity;
+import org.onexus.ui.website.pages.browser.IFilter;
+import org.onexus.ui.website.utils.visible.VisiblePredicate;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class EntitySelectBox extends Panel {
 
@@ -83,7 +93,12 @@ public class EntitySelectBox extends Panel {
         RepeatingView links = new RepeatingView("links");
 
         if (searchType.getLinks()!=null) {
-            for (SearchLink searchLink : searchType.getLinks()) {
+
+            List<SearchLink> filteredLinks = new ArrayList<SearchLink>();
+            VisiblePredicate predicate = new VisiblePredicate(ResourceUtils.getParentURI(collection.getURI()), Arrays.asList(new IFilter[] { new FilterEntity(entity) }));
+            CollectionUtils.select(searchType.getLinks(), predicate, filteredLinks);
+
+            for (SearchLink searchLink : filteredLinks) {
                 WebMarkupContainer item = new WebMarkupContainer(links.newChildId());
                 WebMarkupContainer link = new WebMarkupContainer("link");
                 link.add(new AttributeModifier("href", createLink(searchLink.getUrl(), searchType.getCollection(), entityId)));

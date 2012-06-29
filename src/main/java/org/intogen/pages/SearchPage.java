@@ -60,7 +60,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
             @Override
             protected void onSubmit() {
                 String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
-                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri));
+                SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri).setOutputMarkupId(true));
             }
         };
 
@@ -88,7 +88,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
         typeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                SearchPage.this.addOrReplace(new EmptyPanel("boxes").setOutputMarkupId(true));
+                SearchPage.this.addOrReplace(new EmptyPanel("boxes"));
                 getStatus().setSearch("");
                 target.add(search);
                 target.add(SearchPage.this.get("examplesContainer"));
@@ -110,7 +110,10 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         getStatus().setSearch(getModelObject());
+                        String baseUri = ResourceUtils.getParentURI(SearchPage.this.getConfig().getWebsiteConfig().getURI());
+                        SearchPage.this.addOrReplace(new BoxesPanel("boxes", SearchPage.this.getStatus(), baseUri));
                         target.add(search);
+                        target.add(SearchPage.this.get("boxes"));
                     }
                 };
 
@@ -126,7 +129,7 @@ public class SearchPage extends Page<SearchPageConfig, SearchPageStatus> {
 
         add(examples);
 
-        add(new EmptyPanel("boxes").setOutputMarkupId(true));
+        add(new EmptyPanel("boxes").setMarkupId("boxes"));
 
     }
 
