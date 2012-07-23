@@ -20,13 +20,7 @@
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.core</artifactId>
-            <version>${onexus.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.ui</artifactId>
+            <artifactId>org.onexus.ui.website</artifactId>
             <version>${onexus.version}</version>
         </dependency>
 

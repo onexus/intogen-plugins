@@ -6,6 +6,7 @@ import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
 import org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator;
 
 public class ImpactDecoratorCreator implements IDecoratorCreator {
+
     @Override
     public String getDecoratorId() {
         return "IMPACT";
