@@ -4,9 +4,9 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.onexus.core.IEntity;
-import org.onexus.core.resources.Field;
-import org.onexus.ui.website.widgets.tableviewer.decorators.FieldDecorator;
+import org.onexus.collection.api.Field;
+import org.onexus.collection.api.IEntity;
+import org.onexus.ui.website.widgets.tableviewer.decorators.utils.FieldDecorator;
 
 public class ImpactDecorator extends FieldDecorator {
 
