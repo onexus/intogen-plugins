@@ -56,7 +56,7 @@ public class CtPanel extends Panel {
 
             // Label
             Collection collection = ct.getCollection();
-            String label = String.valueOf(ct.get("TRANSCRIPTID")) + " - " + String.valueOf(ct.get("CONSEQUENCETYPE"));
+            String label = String.valueOf(ct.get("TRANSCRIPTID")) + " - " + String.valueOf(ct.get("CT"));
             accordionToggle.add(new Label("label", label));
 
             // Fields values
