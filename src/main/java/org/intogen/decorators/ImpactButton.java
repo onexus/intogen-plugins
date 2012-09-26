@@ -21,7 +21,7 @@ public class ImpactButton extends Panel {
         IEntity entity = entityModel.getObject();
         Object value = entity.get(FIELD_IMPACT);
 
-        String label = "";
+        String label = "NA";
         String labelClass = "label";
         if (value != null) {
             int val = (Integer) value;
