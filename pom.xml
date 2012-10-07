@@ -11,6 +11,7 @@
 
     <properties>
         <onexus.version>0.3.0-SNAPSHOT</onexus.version>
+        <wicket.version>6.0.0</wicket.version>
         <bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>
     </properties>
 
@@ -23,7 +24,6 @@
             <artifactId>org.onexus.ui.website</artifactId>
             <version>${onexus.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>

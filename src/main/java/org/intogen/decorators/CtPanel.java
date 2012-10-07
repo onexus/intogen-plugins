@@ -7,25 +7,15 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.onexus.collection.api.*;
-import org.onexus.collection.api.query.And;
-import org.onexus.collection.api.query.Equal;
-import org.onexus.collection.api.query.Query;
-import org.onexus.collection.api.utils.EntityIterator;
-import org.onexus.resource.api.utils.ResourceUtils;
+import org.intogen.decorators.domain.Consequence;
+import org.intogen.decorators.domain.Mutation;
+import org.onexus.collection.api.ICollectionManager;
+import org.onexus.collection.api.IEntity;
+import org.onexus.ui.website.widgets.tableviewer.formaters.DoubleFormater;
 
 import javax.inject.Inject;
-import java.util.Iterator;
 
 public class CtPanel extends Panel {
-
-    private static String COLLECTION_CT = "data/snv_project_consequence-types";
-
-    private static String FIELD_CHR = "CHROMOSOME";
-    private static String FIELD_POSITION = "POSITION";
-    private static String FIELD_ALLELE = "ALLELE";
-    private static String FIELD_GENEID = "GENEID";
-    private static String FIELD_PROJECTID = "PROJECTID";
 
     @Inject
     public ICollectionManager collectionManager;
@@ -33,19 +23,23 @@ public class CtPanel extends Panel {
     public CtPanel(String id, IEntity entity) {
         super(id);
 
-        Iterator<IEntity> entities = loadConsequenceTypes(entity);
+        Mutation mutation = new Mutation(entity, collectionManager);
 
-        RepeatingView entitiesContainer = new RepeatingView("entities");
-        add(entitiesContainer);
+        add(new Label("snv", mutation.getChromosome() + ":" + mutation.getPosition() + ":" + mutation.getAllele()));
+        //add(new Label("symbol", mutation.getSymbol()));
+        add(new Label("ensembl", mutation.getEnsembl()));
+        //add(new Label("externalId", mutation.getExternalId()));
+        //add(new Label("recurrence", Integer.toString(mutation.getRecurrence())));
+        //add(new Label("samples", Integer.toString(mutation.getSamples())));
+        //add(new Label("frequency", DoubleFormater.format(mutation.getFrequency(), 3)));
 
+        RepeatingView consquencesContainer = new RepeatingView("consequences");
+        for (Consequence consequence : mutation.getConsequences()) {
 
-        while (entities.hasNext()) {
-            IEntity ct = entities.next();
+            WebMarkupContainer item = new WebMarkupContainer(consquencesContainer.newChildId());
+            consquencesContainer.add(item);
 
-            WebMarkupContainer item = new WebMarkupContainer(entitiesContainer.newChildId());
-            entitiesContainer.add(item);
-
-            // Prepare accordion containers
+            // Prepare accordion container
             WebMarkupContainer accordionToggle = new WebMarkupContainer("accordion-toggle");
             WebMarkupContainer accordionBody = new WebMarkupContainer("accordion-body");
             String bodyId = item.getMarkupId() + "-body";
@@ -55,50 +49,53 @@ public class CtPanel extends Panel {
             item.add(accordionBody);
 
             // Label
-            Collection collection = ct.getCollection();
-            String label = String.valueOf(ct.get("TRANSCRIPTID")) + " - " + String.valueOf(ct.get("CT"));
+            String label = String.valueOf(consequence.getTranscript());
+            if (!"null".equals(consequence.getUniprot())) {
+                label = label + " (" + consequence.getUniprot() + ")";
+            }
+            label = label + " - " + String.valueOf(consequence.getConsequenceType());
             accordionToggle.add(new Label("label", label));
 
-            // Fields values
-            RepeatingView fields = new RepeatingView("fields");
-            for (Field field : collection.getFields()) {
+            // Fields
+            accordionBody.add(new Label("protein", consequence.getProtein()));
+            accordionBody.add(new Label("uniprot", consequence.getUniprot()));
+            accordionBody.add(new Label("aachange", consequence.getAachange()));
 
-                Object value = ct.get(field.getId());
-                if (value != null && !StringUtils.isEmpty(value.toString())) {
+            accordionBody.add(new Label("siftClass", createClassLabel(consequence.getSiftClass())).setEscapeModelStrings(false));
+            accordionBody.add(new Label("siftScore", DoubleFormater.format(consequence.getSiftScore(), 3)));
+            accordionBody.add(new Label("siftTrans", DoubleFormater.format(consequence.getSiftTrans(), 3)));
 
-                    WebMarkupContainer fc = new WebMarkupContainer(fields.newChildId());
-                    fc.setRenderBodyOnly(true);
-                    fc.add(new Label("label", field.getLabel()).add(new AttributeModifier("title", field.getTitle())));
-                    fc.add(new Label("value", StringUtils.abbreviate(value.toString(), 50)));
-                    fields.add(fc);
-                }
-            }
-            accordionBody.add(fields);
+            accordionBody.add(new Label("pph2Class", createClassLabel(consequence.getPph2Class())).setEscapeModelStrings(false));
+            accordionBody.add(new Label("pph2Score", DoubleFormater.format(consequence.getPph2Score(), 3)));
+            accordionBody.add(new Label("pph2Trans", DoubleFormater.format(consequence.getPph2Trans(), 3)));
+
+            accordionBody.add(new Label("maClass", createClassLabel(consequence.getMaClass())).setEscapeModelStrings(false));
+            accordionBody.add(new Label("maScore", DoubleFormater.format(consequence.getMaScore(), 3)));
+            accordionBody.add(new Label("maTrans", DoubleFormater.format(consequence.getMaTrans(), 3)));
 
         }
-
+        add(consquencesContainer);
     }
 
-    private Iterator<IEntity> loadConsequenceTypes(IEntity entity) {
+    private String createClassLabel(String className) {
 
-        String projectUri = ResourceUtils.getProjectURI(entity.getCollection().getURI());
-        String collectionUri = ResourceUtils.getAbsoluteURI(projectUri, COLLECTION_CT);
+        if (className == null || StringUtils.isEmpty(className)) {
+            return "<span class=\"label\">NA</span>";
+        }
 
-        String fromAlias = "c";
-        Query query = new Query();
-        query.setOn(projectUri);
-        query.addDefine(fromAlias, COLLECTION_CT);
-        query.setFrom(fromAlias);
-        query.addSelect(fromAlias, null);
-        query.setWhere(new And(new Equal(fromAlias, FIELD_CHR, entity.get(FIELD_CHR)),
-                new And(new Equal(fromAlias, FIELD_POSITION, entity.get(FIELD_POSITION)),
-                        new And(new Equal(fromAlias, FIELD_ALLELE, entity.get(FIELD_ALLELE)),
-                                new And(new Equal(fromAlias, FIELD_GENEID, entity.get(FIELD_GENEID)),
-                                        new Equal(fromAlias, FIELD_PROJECTID, entity.get(FIELD_PROJECTID))
-                                )))));
+        if (className.equals("low_impact")) {
+            return "<span class=\"label label-success\">low</span>";
+        }
 
-        IEntityTable table = collectionManager.load(query);
+        if (className.equals("medium_impact")) {
+            return "<span class=\"label label-warning\">medium</span>";
+        }
 
-        return new EntityIterator(table, collectionUri );
+        if (className.equals("high_impact")) {
+            return "<span class=\"label label-important\">high</span>";
+        }
+
+        return "<span class=\"label\">NA</span>";
+
     }
 }
