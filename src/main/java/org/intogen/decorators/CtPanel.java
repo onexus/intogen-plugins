@@ -28,6 +28,7 @@ public class CtPanel extends Panel {
         add(new Label("snv", mutation.getChromosome() + ":" + mutation.getPosition() + ":" + mutation.getAllele()));
         //add(new Label("symbol", mutation.getSymbol()));
         add(new Label("ensembl", mutation.getEnsembl()));
+        add(new WebMarkupContainer("ensembl_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Gene/Summary?g="+mutation.getEnsembl())));
         //add(new Label("externalId", mutation.getExternalId()));
         //add(new Label("recurrence", Integer.toString(mutation.getRecurrence())));
         //add(new Label("samples", Integer.toString(mutation.getSamples())));

@@ -34,7 +34,14 @@ public class Consequence implements Serializable {
         this.uniprot = String.valueOf(ct.get("UNIPROTID"));
         this.consequenceType = String.valueOf(ct.get("CT"));
         this.protein = String.valueOf(ct.get("PROTEINID"));
+
+        Object protein_pos = ct.get("PROTEIN_POSITION");
+
         this.aachange = String.valueOf(ct.get("AA_CHANGE"));
+
+        if (protein_pos != null) {
+            this.aachange = this.aachange.substring(0,1) + String.valueOf(protein_pos) + this.aachange.substring(1);
+        }
 
         // Sift
         this.siftClass = String.valueOf(ct.get("SIFT_TRANSFIC_CLASS"));
