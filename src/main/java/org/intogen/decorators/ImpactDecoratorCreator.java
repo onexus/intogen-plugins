@@ -17,12 +17,12 @@ public class ImpactDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public ParameterKey[] getParameterKeys() {
-        return new ParameterKey[0];
+        return ImpactDecoratorParameters.values();
     }
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
-        return new ImpactDecorator(columnField);
+        return new ImpactDecorator(columnField, parameters);
     }
 
 

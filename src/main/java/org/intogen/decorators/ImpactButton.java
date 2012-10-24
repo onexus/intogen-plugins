@@ -15,7 +15,7 @@ public class ImpactButton extends Panel {
 
     private static String FIELD_IMPACT = "SNV_IMPACT";
 
-    public ImpactButton(String id, IModel<IEntity> entityModel) {
+    public ImpactButton(String id, IModel<IEntity> entityModel, boolean showDetails) {
         super(id, new EntityModel(entityModel.getObject()));
 
         IEntity entity = entityModel.getObject();
@@ -52,14 +52,16 @@ public class ImpactButton extends Panel {
         Label button = new Label("button", label);
         button.add(new AttributeModifier("class", labelClass));
 
-        button.add( new AjaxEventBehavior("onclick") {
-            @Override
-            protected void onEvent(AjaxRequestTarget target) {
-                widgetModal.addOrReplace(new CtPanel("widget", getEntity()));
-                target.add(widgetModal);
-                target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('show')");
-            }
-        });
+        if (showDetails) {
+            button.add(new AjaxEventBehavior("onclick") {
+                @Override
+                protected void onEvent(AjaxRequestTarget target) {
+                    widgetModal.addOrReplace(new CtPanel("widget", getEntity()));
+                    target.add(widgetModal);
+                    target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('show')");
+                }
+            });
+        }
 
         add(button);
 
