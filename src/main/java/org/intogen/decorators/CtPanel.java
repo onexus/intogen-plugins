@@ -18,7 +18,7 @@ import javax.inject.Inject;
 public class CtPanel extends Panel {
 
     @Inject
-    public ICollectionManager collectionManager;
+    public transient ICollectionManager collectionManager;
 
     public CtPanel(String id, IEntity entity) {
         super(id);
