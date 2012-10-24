@@ -12,6 +12,7 @@ public class Consequence implements Serializable {
     private String consequenceType;
     private String protein;
     private String aachange;
+    private String proteinPosition;
 
     private String siftClass;
     private Double siftScore;
@@ -34,7 +35,16 @@ public class Consequence implements Serializable {
         this.uniprot = String.valueOf(ct.get("UNIPROTID"));
         this.consequenceType = String.valueOf(ct.get("CT"));
         this.protein = String.valueOf(ct.get("PROTEINID"));
+
+        Object protein_pos = ct.get("PROTEIN_POSITION");
+
         this.aachange = String.valueOf(ct.get("AA_CHANGE"));
+
+        if (protein_pos != null) {
+            this.proteinPosition = String.valueOf(protein_pos);
+        } else {
+            this.proteinPosition = "-";
+        }
 
         // Sift
         this.siftClass = String.valueOf(ct.get("SIFT_TRANSFIC_CLASS"));
@@ -55,6 +65,10 @@ public class Consequence implements Serializable {
 
     public String getAachange() {
         return aachange;
+    }
+
+    public String getProteinPosition() {
+        return proteinPosition;
     }
 
     public String getConsequenceType() {
