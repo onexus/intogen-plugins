@@ -17,22 +17,19 @@ import java.util.Set;
 
 public class Mutation implements Serializable {
 
-    static String COLLECTION_CT = "data/snv_project_consequence-types";
+    static String COLLECTION_CT = "data/snv_consequence-types";
     static String COLLECTION_GENES = "data/genes_annotations";
 
+    static String FIELD_SNVID = "SNVID";
     static String FIELD_CHR = "CHROMOSOME";
     static String FIELD_POSITION = "POSITION";
     static String FIELD_ALLELE = "ALLELE";
     static String FIELD_GENEID = "GENEID";
-    static String FIELD_PROJECTID = "PROJECTID";
 
     // Basic mutation fields
     private String collectionUri;
     private String ensembl;
-    private String chromosome;
-    private Integer position;
-    private String allele;
-    private String projectId;
+    private String snv;
 
     // Extra mutation fields
     private String externalId;
@@ -49,11 +46,8 @@ public class Mutation implements Serializable {
 
         // Load mutation values
         this.collectionUri = entity.getCollection().getURI();
-        this.chromosome = String.valueOf(entity.get(FIELD_CHR));
-        this.position = (Integer) entity.get(FIELD_POSITION);
-        this.allele = String.valueOf(entity.get(FIELD_ALLELE));
+        this.snv = String.valueOf(entity.get(FIELD_SNVID));
         this.ensembl = String.valueOf(entity.get(FIELD_GENEID));
-        this.projectId = String.valueOf(entity.get(FIELD_PROJECTID));
 
         //TODO Load mutation extra query
         this.externalId = "";
@@ -96,22 +90,33 @@ public class Mutation implements Serializable {
         query.addDefine(fromAlias, COLLECTION_CT);
         query.setFrom(fromAlias);
         query.addSelect(fromAlias, null);
-        query.setWhere(new And(new Equal(fromAlias, FIELD_CHR, chromosome),
-                new And(new Equal(fromAlias, FIELD_POSITION, position),
-                        new And(new Equal(fromAlias, FIELD_ALLELE, allele),
-                                new And(new Equal(fromAlias, FIELD_GENEID, ensembl),
-                                        new Equal(fromAlias, FIELD_PROJECTID, projectId)
-                                )))));
+        query.setWhere(new And(new Equal(fromAlias, FIELD_CHR, getChromosome()),
+                new And(new Equal(fromAlias, FIELD_POSITION, getPosition()),
+                        new And(new Equal(fromAlias, FIELD_ALLELE, getAllele()),
+                                new Equal(fromAlias, FIELD_GENEID, ensembl)
+                                ))));
 
         return query;
     }
 
-    public String getAllele() {
-        return allele;
+    public String getSnv() {
+        return snv;
     }
 
     public String getChromosome() {
-        return chromosome;
+        int firstColon = snv.indexOf(':');
+        return snv.substring(0, firstColon);
+    }
+
+    public String getPosition() {
+        int firstColon = snv.indexOf(':');
+        int lastColon = snv.lastIndexOf(':');
+        return snv.substring(firstColon+1, lastColon);
+    }
+
+    public String getAllele() {
+        int lastColon = snv.lastIndexOf(':');
+        return snv.substring(lastColon+1);
     }
 
     public Set<Consequence> getConsequences() {
@@ -128,10 +133,6 @@ public class Mutation implements Serializable {
 
     public Double getFrequency() {
         return frequency;
-    }
-
-    public Integer getPosition() {
-        return position;
     }
 
     public Integer getRecurrence() {

@@ -25,7 +25,7 @@ public class CtPanel extends Panel {
 
         Mutation mutation = new Mutation(entity, collectionManager);
 
-        add(new Label("snv", mutation.getChromosome() + ":" + mutation.getPosition() + ":" + mutation.getAllele()));
+        add(new Label("snv", mutation.getSnv()));
         add(new WebMarkupContainer("snv_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Location/View?r="+mutation.getChromosome()+"%3A"+mutation.getPosition()+"-"+mutation.getPosition())));
         //add(new Label("symbol", mutation.getSymbol()));
         add(new Label("ensembl", mutation.getEnsembl()));
