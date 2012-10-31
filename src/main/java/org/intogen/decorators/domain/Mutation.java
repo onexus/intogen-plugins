@@ -6,6 +6,7 @@ import org.onexus.collection.api.IEntityTable;
 import org.onexus.collection.api.query.And;
 import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.Query;
+import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.io.Serializable;
@@ -27,7 +28,10 @@ public class Mutation implements Serializable {
     static String FIELD_GENEID = "GENEID";
 
     // Basic mutation fields
-    private String collectionUri;
+    private ORI collectionUri;
+    private ORI genesCollection;
+    private ORI ctCollection;
+    private ORI project;
     private String ensembl;
     private String snv;
 
@@ -49,6 +53,10 @@ public class Mutation implements Serializable {
         this.snv = String.valueOf(entity.get(FIELD_SNVID));
         this.ensembl = String.valueOf(entity.get(FIELD_GENEID));
 
+        project = new ORI(collectionUri.getProjectUrl(), null);
+        genesCollection = new ORI(collectionUri.getProjectUrl(), COLLECTION_GENES);
+        ctCollection = new ORI(collectionUri.getProjectUrl(), COLLECTION_CT);
+
         //TODO Load mutation extra query
         this.externalId = "";
         this.symbol = "";
@@ -61,7 +69,7 @@ public class Mutation implements Serializable {
 
         IEntityTable ctTable = collectionManager.load(getConsquencesQuery());
         while (ctTable.next()) {
-            consequences.add(new Consequence(ctTable));
+            consequences.add(new Consequence(ctCollection, ctTable));
         }
     }
 
@@ -69,12 +77,10 @@ public class Mutation implements Serializable {
 
     private Query getExtraQuery() {
 
-        String projectUri = ResourceUtils.getProjectURI(collectionUri);
-        String collectionUri = ResourceUtils.getAbsoluteURI(projectUri, COLLECTION_GENES);
 
         Query query = new Query();
-        query.setOn(projectUri);
-        query.addDefine("g", COLLECTION_GENES);
+        query.setOn(project);
+        query.addDefine("g", genesCollection);
 
         return query;
     }
@@ -82,12 +88,11 @@ public class Mutation implements Serializable {
 
     private Query getConsquencesQuery() {
 
-        String projectUri = ResourceUtils.getProjectURI(collectionUri);
 
         String fromAlias = "c";
         Query query = new Query();
-        query.setOn(projectUri);
-        query.addDefine(fromAlias, COLLECTION_CT);
+        query.setOn(project);
+        query.addDefine(fromAlias, ctCollection);
         query.setFrom(fromAlias);
         query.addSelect(fromAlias, null);
         query.setWhere(new And(new Equal(fromAlias, FIELD_CHR, getChromosome()),

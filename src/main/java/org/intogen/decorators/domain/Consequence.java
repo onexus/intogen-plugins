@@ -2,6 +2,7 @@ package org.intogen.decorators.domain;
 
 import org.onexus.collection.api.IEntity;
 import org.onexus.collection.api.IEntityTable;
+import org.onexus.resource.api.ORI;
 
 import java.io.Serializable;
 
@@ -26,10 +27,10 @@ public class Consequence implements Serializable {
     private Double maScore;
     private Double maTrans;
 
-    public Consequence(IEntityTable table) {
+    public Consequence(ORI collectionCT, IEntityTable table) {
         super();
 
-        IEntity ct = table.getEntity(Mutation.COLLECTION_CT);
+        IEntity ct = table.getEntity(collectionCT);
 
         this.transcript = String.valueOf(ct.get("TRANSCRIPTID"));
         this.uniprot = String.valueOf(ct.get("UNIPROTID"));
