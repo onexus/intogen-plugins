@@ -9,7 +9,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.IEntity;
-import org.onexus.ui.website.utils.EntityModel;
+import org.onexus.website.api.utils.EntityModel;
 
 public class ImpactButton extends Panel {
 

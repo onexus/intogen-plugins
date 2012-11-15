@@ -3,8 +3,8 @@ package org.intogen.decorators;
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
-import org.onexus.ui.website.widgets.tableviewer.decorators.IDecorator;
-import org.onexus.ui.website.widgets.tableviewer.decorators.IDecoratorCreator;
+import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
+import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
 
 import java.util.Map;
 

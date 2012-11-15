@@ -11,14 +11,13 @@ import org.intogen.decorators.domain.Consequence;
 import org.intogen.decorators.domain.Mutation;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
-import org.onexus.ui.website.widgets.tableviewer.formaters.DoubleFormater;
-
-import javax.inject.Inject;
+import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
+import org.ops4j.pax.wicket.api.PaxWicketBean;
 
 public class CtPanel extends Panel {
 
-    @Inject
-    public transient ICollectionManager collectionManager;
+    @PaxWicketBean(name = "collectionManager")
+    private ICollectionManager collectionManager;
 
     public CtPanel(String id, IEntity entity) {
         super(id);
