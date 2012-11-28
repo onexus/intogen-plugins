@@ -5,7 +5,11 @@
     <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager" />
 
     <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
-        <bean class="org.intogen.decorators.ImpactDecoratorCreator"/>
+        <bean class="org.intogen.decorators.impact.ImpactDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.intogen.decorators.volcanoplot.VolcanoplotDecoratorCreator"/>
     </service>
 
 </blueprint>

@@ -1,4 +1,4 @@
-package org.intogen.decorators.domain;
+package org.intogen.decorators.impact.domain;
 
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;

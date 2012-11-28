@@ -1,14 +1,14 @@
-package org.intogen.decorators;
+package org.intogen.decorators.impact;
 
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.intogen.decorators.domain.Consequence;
-import org.intogen.decorators.domain.Mutation;
+import org.apache.wicket.util.string.Strings;
+import org.intogen.decorators.impact.domain.Consequence;
+import org.intogen.decorators.impact.domain.Mutation;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
@@ -81,7 +81,7 @@ public class CtPanel extends Panel {
 
     private String createClassLabel(String className) {
 
-        if (className == null || StringUtils.isEmpty(className)) {
+        if (className == null || Strings.isEmpty(className)) {
             return "<span class=\"label\">NA</span>";
         }
 

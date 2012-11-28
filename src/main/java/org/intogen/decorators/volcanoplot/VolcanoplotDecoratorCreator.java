@@ -1,4 +1,4 @@
-package org.intogen.decorators;
+package org.intogen.decorators.volcanoplot;
 
 import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
@@ -8,21 +8,21 @@ import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
 
 import java.util.Map;
 
-public class ImpactDecoratorCreator implements IDecoratorCreator {
+public class VolcanoplotDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public String getDecoratorId() {
-        return "IMPACT";
+        return "VOLCANOPLOT";
     }
 
     @Override
     public ParameterKey[] getParameterKeys() {
-        return ImpactDecoratorParameters.values();
+        return new ParameterKey[0];
     }
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Map<ParameterKey, String> parameters) {
-        return new ImpactDecorator(columnField, parameters);
+        return new VolcanoplotDecorator(columnField, parameters);
     }
 
 

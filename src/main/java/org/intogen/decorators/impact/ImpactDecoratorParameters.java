@@ -1,4 +1,4 @@
-package org.intogen.decorators;
+package org.intogen.decorators.impact;
 
 import org.onexus.resource.api.ParameterKey;
 

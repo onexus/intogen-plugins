@@ -20,8 +20,26 @@
 
         <dependency>
             <groupId>org.onexus</groupId>
-            <artifactId>org.onexus.ui.website</artifactId>
+            <artifactId>org.onexus.collection.api</artifactId>
             <version>${onexus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.website.api</artifactId>
+            <version>${onexus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ops4j.pax.wicket</groupId>
+            <artifactId>org.ops4j.pax.wicket.service</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-core</artifactId>
+            <version>6.2.0</version>
         </dependency>
     </dependencies>
 
