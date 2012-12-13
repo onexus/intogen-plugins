@@ -7,12 +7,9 @@ import org.onexus.collection.api.query.And;
 import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
-import org.onexus.resource.api.utils.ResourceUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -49,7 +46,7 @@ public class Mutation implements Serializable {
         super();
 
         // Load mutation values
-        this.collectionUri = entity.getCollection().getURI();
+        this.collectionUri = entity.getCollection().getORI();
         this.snv = String.valueOf(entity.get(FIELD_SNVID));
         this.ensembl = String.valueOf(entity.get(FIELD_GENEID));
 
