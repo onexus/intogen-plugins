@@ -6,26 +6,22 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
-import org.onexus.resource.api.ParameterKey;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
-
-import java.util.Map;
 
 public class ImpactDecorator extends FieldDecorator {
 
-    private boolean showDetails = true;
+    private Parameters parameters;
 
-    public ImpactDecorator(Field field, Map<ParameterKey, String> parameters) {
+    public ImpactDecorator(Field field, Parameters parameters) {
         super(field);
 
-        if (parameters.containsKey(ImpactDecoratorParameters.SHOW_DETAILS)) {
-            showDetails = Boolean.valueOf(parameters.get(ImpactDecoratorParameters.SHOW_DETAILS));
-        }
+        this.parameters = parameters;
     }
 
     @Override
     public void populateCell(WebMarkupContainer cellContainer, String componentId, IModel<IEntity> data) {
-        cellContainer.add(new ImpactButton(componentId, data, showDetails));
+        cellContainer.add(new ImpactButton(componentId, data, parameters));
         cellContainer.add(new AttributeModifier("class", Model.of("st")));
     }
 

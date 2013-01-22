@@ -11,6 +11,7 @@ import org.intogen.decorators.impact.domain.Consequence;
 import org.intogen.decorators.impact.domain.Mutation;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
@@ -19,10 +20,10 @@ public class CtPanel extends Panel {
     @PaxWicketBean(name = "collectionManager")
     private ICollectionManager collectionManager;
 
-    public CtPanel(String id, IEntity entity) {
+    public CtPanel(String id, IEntity entity, Parameters parameters) {
         super(id);
 
-        Mutation mutation = new Mutation(entity, collectionManager);
+        Mutation mutation = new Mutation(entity, collectionManager, parameters);
 
         add(new Label("snv", mutation.getSnv()));
         add(new WebMarkupContainer("snv_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Location/View?r="+mutation.getChromosome()+"%3A"+mutation.getPosition()+"-"+mutation.getPosition())));

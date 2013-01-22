@@ -9,17 +9,16 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.onexus.collection.api.IEntity;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.utils.EntityModel;
 
 public class ImpactButton extends Panel {
 
-    private static String FIELD_IMPACT = "SNV_IMPACT";
-
-    public ImpactButton(String id, IModel<IEntity> entityModel, boolean showDetails) {
+    public ImpactButton(String id, IModel<IEntity> entityModel, final Parameters parameters) {
         super(id, new EntityModel(entityModel.getObject()));
 
         IEntity entity = entityModel.getObject();
-        Object value = entity.get(FIELD_IMPACT);
+        Object value = entity.get(parameters.get(ImpactDecoratorParameters.FIELD_IMPACT));
 
         String label = "NA";
         String labelClass = "label";
@@ -52,11 +51,11 @@ public class ImpactButton extends Panel {
         Label button = new Label("button", label);
         button.add(new AttributeModifier("class", labelClass));
 
-        if (showDetails) {
+        if (parameters.containsKey(ImpactDecoratorParameters.SHOW_DETAILS)) {
             button.add(new AjaxEventBehavior("onclick") {
                 @Override
                 protected void onEvent(AjaxRequestTarget target) {
-                    widgetModal.addOrReplace(new CtPanel("widget", getEntity()));
+                    widgetModal.addOrReplace(new CtPanel("widget", getEntity(), parameters));
                     target.add(widgetModal);
                     target.appendJavaScript("$('#" + widgetModal.getMarkupId() + "').modal('show')");
                 }
