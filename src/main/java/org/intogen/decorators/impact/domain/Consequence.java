@@ -8,6 +8,8 @@ import java.io.Serializable;
 
 public class Consequence implements Serializable {
 
+    private String snv;
+
     private String transcript;
     private String uniprot;
     private String consequenceType;
@@ -31,6 +33,10 @@ public class Consequence implements Serializable {
         super();
 
         IEntity ct = table.getEntity(collectionCT);
+
+        this.snv = String.valueOf(ct.get("CHROMOSOME")) + ":" +
+                String.valueOf(ct.get("POSITION")) + ":" +
+                String.valueOf(ct.get("ALLELE"));
 
         this.transcript = String.valueOf(ct.get("TRANSCRIPTID"));
         this.uniprot = String.valueOf(ct.get("UNIPROTID"));
@@ -124,6 +130,13 @@ public class Consequence implements Serializable {
         return uniprot;
     }
 
+    public String getSnv() {
+        return snv;
+    }
+
+    public void setSnv(String snv) {
+        this.snv = snv;
+    }
 
     @Override
     public boolean equals(Object o) {

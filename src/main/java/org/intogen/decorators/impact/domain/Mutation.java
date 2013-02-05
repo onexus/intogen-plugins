@@ -11,8 +11,7 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Parameters;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 
 public class Mutation implements Serializable {
@@ -35,7 +34,7 @@ public class Mutation implements Serializable {
     private Double frequency;
 
     // Mutation consequences
-    private Set<Consequence> consequences;
+    private Map<String, Set<Consequence>> consequences;
 
     public Mutation(IEntity entity, ICollectionManager collectionManager, Parameters parameters) {
         super();
@@ -48,10 +47,23 @@ public class Mutation implements Serializable {
 
         // Load mutation values
         this.collectionUri = entity.getCollection().getORI();
-        this.chromosome = String.valueOf(entity.get( fieldChr ));
-        this.position = Long.valueOf( String.valueOf(entity.get( fieldPosition )));
-        this.allele = String.valueOf( entity.get(fieldAllele));
-        this.ensembl = String.valueOf( entity.get(fieldGeneid));
+
+        Object value = entity.get( fieldChr );
+        if (value != null) {
+            this.chromosome = String.valueOf(value);
+        }
+
+        if ((value = entity.get( fieldPosition )) != null) {
+            this.position = Long.valueOf( String.valueOf(value));
+        }
+
+        if ((value = entity.get(fieldAllele)) != null) {
+            this.allele = String.valueOf( value );
+        }
+
+        if ((value = entity.get(fieldGeneid)) != null) {
+            this.ensembl = String.valueOf( value );
+        }
 
         project = new ORI(collectionUri.getProjectUrl(), null);
         genesCollection = new ORI(collectionUri.getProjectUrl(), parameters.get(ImpactDecoratorParameters.COLLECTION_GENES));
@@ -65,7 +77,7 @@ public class Mutation implements Serializable {
         this.frequency = 0.0;
 
         // Load mutation consequences
-        this.consequences = new HashSet<Consequence>();
+        this.consequences = new HashMap<String, Set<Consequence>>();
 
         String fromAlias = "c";
         Query query = new Query();
@@ -73,15 +85,33 @@ public class Mutation implements Serializable {
         query.addDefine(fromAlias, ctCollection);
         query.setFrom(fromAlias);
         query.addSelect(fromAlias, null);
-        query.setWhere(new And(new Equal(fromAlias, fieldChr, getChromosome()),
+
+        if (getPosition()!=null) {
+            query.setWhere(new And(new Equal(fromAlias, fieldChr, getChromosome()),
                 new And(new Equal(fromAlias, fieldPosition, getPosition()),
                         new And(new Equal(fromAlias, fieldAllele, getAllele()),
                                 new Equal(fromAlias, fieldGeneid, ensembl)
                         ))));
+        } else {
+            String cellLine = String.valueOf(entity.get("CELLLINEID"));
+            String cancerSite = String.valueOf(entity.get("PROJECTID"));
+            query.setWhere(
+                    new And(
+                        new Equal(fromAlias, "PROJECTID", cancerSite),
+                    new And(
+                        new Equal(fromAlias, fieldGeneid, ensembl),
+                        new Equal(fromAlias, "SAMPLEID", cellLine)
+                    ))
+            );
+        }
 
         IEntityTable ctTable = collectionManager.load(query);
         while (ctTable.next()) {
-            consequences.add(new Consequence(ctCollection, ctTable));
+            Consequence ct = new Consequence(ctCollection, ctTable);
+            if (!consequences.containsKey(ct.getSnv())) {
+                consequences.put(ct.getSnv(), new HashSet<Consequence>());
+            }
+            consequences.get(ct.getSnv()).add(ct);
         }
     }
 
@@ -112,8 +142,12 @@ public class Mutation implements Serializable {
         return allele;
     }
 
-    public Set<Consequence> getConsequences() {
-        return consequences;
+    public Set<Consequence> getConsequences(String snv) {
+        return consequences.get(snv);
+    }
+
+    public Set<String> getSnvs() {
+        return consequences.keySet();
     }
 
     public String getEnsembl() {
