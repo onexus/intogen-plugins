@@ -26,9 +26,9 @@ public class VolcanoplotDecorator extends FieldDecorator {
         Double pvalue = (Double) entity.get("PVALUE");
         Double significane = (Double) entity.get("VOLCANOPLOT");
 
-        if (pvalue < 0.02) {
+        if (pvalue!=null && pvalue < 0.02) {
             boolean red = false;
-            if (significane > 1) {
+            if (significane!=null && significane > 1) {
                 red = true;
             }
 
