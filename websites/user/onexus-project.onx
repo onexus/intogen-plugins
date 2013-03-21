@@ -1,0 +1,17 @@
+<project>
+
+    <alias>
+        genes = https://bitbucket.org/intogen/intogen-sources.git?ensembl/hsa/genes
+        pathways = https://bitbucket.org/intogen/intogen-sources.git?kegg/pathways
+        pathway2gene = https://bitbucket.org/intogen/intogen-sources.git?kegg/map/ensembl_hsa_genes
+        intogen-arrays = https://bitbucket.org/intogen/intogen-arrays.git
+    </alias>
+
+    <plugins>
+        <plugin>
+            <id>tsv-loader</id>
+            <location>mvn:org.onexus/org.onexus.collection.loader.tsv/0.3.0-SNAPSHOT</location>
+        </plugin>
+    </plugins>
+</project>
+

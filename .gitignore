@@ -4,6 +4,8 @@
 *.iml
 *.ipr
 *.iws
+*.tsv.gz
+results/*
 
 # Eclipse files
 .classpath
