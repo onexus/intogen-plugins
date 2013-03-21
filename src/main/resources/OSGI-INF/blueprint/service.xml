@@ -12,4 +12,8 @@
         <bean class="org.intogen.decorators.volcanoplot.VolcanoplotDecoratorCreator"/>
     </service>
 
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.intogen.decorators.xrefs.XRefsDecoratorCreator"/>
+    </service>
+
 </blueprint>

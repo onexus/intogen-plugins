@@ -96,15 +96,15 @@ public class CtPanel extends Panel {
             return "<span class=\"label\">NA</span>";
         }
 
-        if (className.equals("low_impact")) {
+        if (className.equals("low")) {
             return "<span class=\"label label-success\">low</span>";
         }
 
-        if (className.equals("medium_impact")) {
+        if (className.equals("medium")) {
             return "<span class=\"label label-warning\">medium</span>";
         }
 
-        if (className.equals("high_impact")) {
+        if (className.equals("high")) {
             return "<span class=\"label label-important\">high</span>";
         }
 

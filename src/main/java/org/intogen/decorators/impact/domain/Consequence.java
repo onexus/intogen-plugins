@@ -34,16 +34,16 @@ public class Consequence implements Serializable {
 
         IEntity ct = table.getEntity(collectionCT);
 
-        this.snv = String.valueOf(ct.get("CHROMOSOME")) + ":" +
-                String.valueOf(ct.get("POSITION")) + ":" +
+        this.snv = String.valueOf(ct.get("CHR")) + ":" +
+                String.valueOf(ct.get("START")) + ":" +
                 String.valueOf(ct.get("ALLELE"));
 
-        this.transcript = String.valueOf(ct.get("TRANSCRIPTID"));
-        this.uniprot = String.valueOf(ct.get("UNIPROTID"));
+        this.transcript = String.valueOf(ct.get("TRANSCRIPT_ID"));
+        this.uniprot = String.valueOf(ct.get("UNIPROT_ID"));
         this.consequenceType = String.valueOf(ct.get("CT"));
-        this.protein = String.valueOf(ct.get("PROTEINID"));
+        this.protein = String.valueOf(ct.get("PROTEIN_ID"));
 
-        Object protein_pos = ct.get("PROTEIN_POSITION");
+        Object protein_pos = ct.get("PROTEIN_POS");
 
         this.aachange = String.valueOf(ct.get("AA_CHANGE"));
 
@@ -55,17 +55,17 @@ public class Consequence implements Serializable {
 
         // Sift
         this.siftClass = String.valueOf(ct.get("SIFT_TRANSFIC_CLASS"));
-        this.siftScore = (Double) ct.get("SIFT");
+        this.siftScore = (Double) ct.get("SIFT_SCORE");
         this.siftTrans = (Double) ct.get("SIFT_TRANSFIC");
 
         // Pph2
         this.pph2Class = String.valueOf(ct.get("PPH2_TRANSFIC_CLASS"));
-        this.pph2Score = (Double) ct.get("PPH2");
+        this.pph2Score = (Double) ct.get("PPH2_SCORE");
         this.pph2Trans = (Double) ct.get("PPH2_TRANSFIC");
 
         // MA
         this.maClass = String.valueOf(ct.get("MA_TRANSFIC_CLASS"));
-        this.maScore = (Double) ct.get("MA");
+        this.maScore = (Double) ct.get("MA_SCORE");
         this.maTrans = (Double) ct.get("MA_TRANSFIC");
 
     }
