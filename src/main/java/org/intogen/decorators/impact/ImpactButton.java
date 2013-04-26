@@ -20,36 +20,13 @@ public class ImpactButton extends Panel {
         IEntity entity = entityModel.getObject();
         Object value = entity.get(parameters.get(ImpactDecoratorParameters.FIELD_IMPACT));
 
-        String label = "NA";
-        String labelClass = "label";
-        if (value != null) {
-            int val = (Integer) value;
-            switch (val) {
-                case 1:
-                    label = "High";
-                    labelClass = "label label-important";
-                    break;
-                case 2:
-                    label = "Medium";
-                    labelClass = "label label-warning";
-                    break;
-                case 3:
-                    label = "Low";
-                    labelClass = "label label-info";
-                    break;
-                default:
-                    label = "None";
-                    labelClass = "label label-success";
-            }
-        }
-
         final WebMarkupContainer widgetModal = new WebMarkupContainer("widgetModal");
         widgetModal.setOutputMarkupId(true);
         widgetModal.add(new EmptyPanel("widget"));
         add(widgetModal);
 
-        Label button = new Label("button", label);
-        button.add(new AttributeModifier("class", labelClass));
+        Label button = new Label("button", impactToLabel(value));
+        button.add(new AttributeModifier("class", impactToLabelClass(value)));
 
         if (parameters.containsKey(ImpactDecoratorParameters.SHOW_DETAILS)) {
             button.add(new AjaxEventBehavior("onclick") {
@@ -71,4 +48,48 @@ public class ImpactButton extends Panel {
         return (IEntity) getDefaultModelObject();
     }
 
+    public static String impactToLabel(Object value) {
+
+        if (value == null || !(value instanceof Integer)) {
+            return "NA";
+        }
+
+        int val = (Integer) value;
+        if (val == 1) {
+            return "High";
+        }
+
+        if (val == 2) {
+            return "Medium";
+        }
+
+        if (val == 3) {
+            return "Low";
+        }
+
+        return "None";
+    }
+
+    public static String impactToLabelClass(Object value) {
+
+        if (value == null || !(value instanceof Integer)) {
+            return "label";
+        }
+
+        int val = (Integer) value;
+        if (val == 1) {
+            return "label label-important";
+        }
+
+        if (val == 2) {
+            return "label label-warning";
+        }
+
+        if (val == 3) {
+            return "label label-info";
+        }
+
+        return "label label-success";
+
+    }
 }

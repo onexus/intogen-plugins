@@ -15,6 +15,11 @@ import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
 import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 public class CtPanel extends Panel {
 
     @PaxWicketBean(name = "collectionManager")
@@ -22,8 +27,6 @@ public class CtPanel extends Panel {
 
     public CtPanel(String id, IEntity entity, Parameters parameters) {
         super(id);
-
-
 
         Mutation mutation = new Mutation(entity, collectionManager, parameters);
 
@@ -44,7 +47,16 @@ public class CtPanel extends Panel {
 
             RepeatingView consquencesContainer = new RepeatingView("consequences");
 
-            for (Consequence consequence : mutation.getConsequences(snv)) {
+            List<Consequence> consequences = new ArrayList<Consequence>(mutation.getConsequences(snv));
+
+            Collections.sort(consequences, new Comparator<Consequence>() {
+                @Override
+                public int compare(Consequence o1, Consequence o2) {
+                    return impactToInteger(o2.getImpact()).compareTo(impactToInteger(o1.getImpact()));
+                }
+            });
+
+            for (Consequence consequence : consequences) {
 
                 WebMarkupContainer item = new WebMarkupContainer(consquencesContainer.newChildId());
                 consquencesContainer.add(item);
@@ -59,56 +71,120 @@ public class CtPanel extends Panel {
                 item.add(accordionBody);
 
                 // Label
-                String label = String.valueOf(consequence.getTranscript());
-                if (!"null".equals(consequence.getUniprot())) {
+                String label = createClassLabel(consequence.getImpact());
+                label = label + "&nbsp;&nbsp;" + String.valueOf(consequence.getTranscript());
+                if (!Strings.isEmpty(consequence.getUniprot()) && !"null".equals(consequence.getUniprot())) {
                     label = label + " (" + consequence.getUniprot() + ")";
                 }
                 label = label + " - " + String.valueOf(consequence.getConsequenceType());
-                accordionToggle.add(new Label("label", label));
+                accordionToggle.add(new Label("label", label).setEscapeModelStrings(false));
+
+                // Type of CT
+                String ct = consequence.getConsequenceType();
+                int type = 0;
+
+                if (ct.contains("missense_variant")) {
+                    type = 1;
+                } else if (ct.contains("framseshift_variant") ||
+                            ct.contains("synonymous_variant") ||
+                            ct.contains("stop_gained")
+                        ) {
+                    type = 2;
+                }
 
                 // Fields
-                accordionBody.add(new Label("protein", consequence.getProtein()));
-                accordionBody.add(new Label("uniprot", consequence.getUniprot()));
-                accordionBody.add(new Label("aachange", consequence.getAachange()));
-                accordionBody.add(new Label("proteinpos", consequence.getProteinPosition()));
+                RepeatingView fields = new RepeatingView("fields");
+                fields.setRenderBodyOnly(true);
+                accordionBody.add(fields);
 
-                accordionBody.add(new Label("siftClass", createClassLabel(consequence.getSiftClass())).setEscapeModelStrings(false));
-                accordionBody.add(new Label("siftScore", DoubleFormater.format(consequence.getSiftScore(), 3)));
-                accordionBody.add(new Label("siftTrans", DoubleFormater.format(consequence.getSiftTrans(), 3)));
+                if (type == 1 || type == 2) {
+                    addField(fields, "Protein", consequence.getProtein(), true);
+                    addField(fields, "Uniprot", consequence.getUniprot(), true);
+                }
 
-                accordionBody.add(new Label("pph2Class", createClassLabel(consequence.getPph2Class())).setEscapeModelStrings(false));
-                accordionBody.add(new Label("pph2Score", DoubleFormater.format(consequence.getPph2Score(), 3)));
-                accordionBody.add(new Label("pph2Trans", DoubleFormater.format(consequence.getPph2Trans(), 3)));
+                if (type == 1) {
+                    addField(fields, "AA change", consequence.getAachange(), true);
+                    addField(fields, "Protein position", consequence.getProteinPosition(),true);
+                }
 
-                accordionBody.add(new Label("maClass", createClassLabel(consequence.getMaClass())).setEscapeModelStrings(false));
-                accordionBody.add(new Label("maScore", DoubleFormater.format(consequence.getMaScore(), 3)));
-                accordionBody.add(new Label("maTrans", DoubleFormater.format(consequence.getMaTrans(), 3)));
+                if (type == 2 || type == 0) {
+                    addField(fields,  "Impact", createClassLabel(consequence.getImpact()), false);
+                }
 
+                // Table
+                WebMarkupContainer table = new WebMarkupContainer("table");
+                accordionBody.add(table);
+                table.setVisible(type == 1);
+
+                table.add(new Label("siftClass", createClassLabel(consequence.getSiftClass())).setEscapeModelStrings(false));
+                table.add(new Label("siftScore", DoubleFormater.format(consequence.getSiftScore(), 3)));
+                table.add(new Label("siftTrans", DoubleFormater.format(consequence.getSiftTrans(), 3)));
+
+                table.add(new Label("pph2Class", createClassLabel(consequence.getPph2Class())).setEscapeModelStrings(false));
+                table.add(new Label("pph2Score", DoubleFormater.format(consequence.getPph2Score(), 3)));
+                table.add(new Label("pph2Trans", DoubleFormater.format(consequence.getPph2Trans(), 3)));
+
+                table.add(new Label("maClass", createClassLabel(consequence.getMaClass())).setEscapeModelStrings(false));
+                table.add(new Label("maScore", DoubleFormater.format(consequence.getMaScore(), 3)));
+                table.add(new Label("maTrans", DoubleFormater.format(consequence.getMaTrans(), 3)));
             }
 
             snvItem.add(consquencesContainer);
         }
     }
 
-    private String createClassLabel(String className) {
+    private static void addField(RepeatingView view, String title, String value, boolean escape) {
+
+        if (!Strings.isEmpty(value)) {
+            WebMarkupContainer item = new WebMarkupContainer(view.newChildId());
+            item.add(new Label("title", title));
+            item.add(new Label("value", value).setEscapeModelStrings(escape));
+            view.add(item);
+        }
+
+    }
+
+    private static String createClassLabel(String className) {
 
         if (className == null || Strings.isEmpty(className)) {
             return "<span class=\"label\">NA</span>";
         }
 
         if (className.equals("low")) {
-            return "<span class=\"label label-success\">low</span>";
+            return "<span class=\"label label-info\">Low</span>";
         }
 
         if (className.equals("medium")) {
-            return "<span class=\"label label-warning\">medium</span>";
+            return "<span class=\"label label-warning\">Medium</span>";
         }
 
         if (className.equals("high")) {
-            return "<span class=\"label label-important\">high</span>";
+            return "<span class=\"label label-important\">High</span>";
         }
 
         return "<span class=\"label\">NA</span>";
+
+    }
+
+    private static Integer impactToInteger(String className) {
+
+        if (className == null || Strings.isEmpty(className)) {
+            return 0;
+        }
+
+        if (className.equals("low")) {
+            return 1;
+        }
+
+        if (className.equals("medium")) {
+            return 2;
+        }
+
+        if (className.equals("high")) {
+            return 3;
+        }
+
+        return 0;
 
     }
 }

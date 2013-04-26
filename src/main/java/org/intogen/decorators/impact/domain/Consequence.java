@@ -70,6 +70,10 @@ public class Consequence implements Serializable {
 
     }
 
+    public String getImpact() {
+        return maClass;
+    }
+
     public String getAachange() {
         return aachange;
     }

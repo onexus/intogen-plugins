@@ -16,4 +16,8 @@
         <bean class="org.intogen.decorators.xrefs.XRefsDecoratorCreator"/>
     </service>
 
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.intogen.decorators.intogen.IntogenColumnDecoratorCreator"/>
+    </service>
+
 </blueprint>

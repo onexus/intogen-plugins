@@ -4,6 +4,7 @@
     <bottom>${intogen-arrays}?html/bottom.html</bottom>
     <css>css/website.css</css>
     <login>true</login>
+    <authorization>jordi.deu@upf.edu</authorization>
 
     <connection>
         <url>/web/arrays/v04</url>
@@ -41,7 +42,6 @@
             <id>browser</id>
             <label>Browser</label>
             <css>css/browser.css</css>
-            <authorization>registered</authorization>
             <tabs>
                 <tab>
                     <id>mutations</id>

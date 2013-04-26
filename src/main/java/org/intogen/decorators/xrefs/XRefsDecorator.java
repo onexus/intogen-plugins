@@ -16,7 +16,6 @@ public class XRefsDecorator extends FieldDecorator {
 
     public XRefsDecorator(Field field, Map<ParameterKey, String> parameters) {
         super(field);
-
     }
 
     private static Pattern PATTERN_COMMA = Pattern.compile(",");
@@ -45,7 +44,7 @@ public class XRefsDecorator extends FieldDecorator {
 
                 if ("ESP".equalsIgnoreCase(pair[0])) {
                     text = "<span class=\"badge badge-info\">E</span>";
-                    link = "";
+                    link = "http://www.ensembl.org/Homo_sapiens/Variation/Summary?source=ESP;v=" + pair[1];
                 }
 
                 if ("dbSNP".equalsIgnoreCase(pair[0])) {
