@@ -8,7 +8,9 @@ public enum IntogenColumnParameters implements ParameterKey {
     INTOGEN_URL("intogen", "IntOGen url", "/web/mutations/v04/browser/mutations", true),
     FIELD("field", "IntOGen field", "INTOGEN_SIG", true),
     MUTATIONS("mutations", "Mutations collection to filter", "", true),
-    GENES("genes", "Genes collection to filter", "", false);
+    GENES("genes", "Genes collection to filter", "", false),
+    TEXT("text", "Text to show into the cell", "IntOGen", true),
+    TOOLTIP("tooltip", "Tooltip to show over the link", "", true);
 
     private final String key;
     private final String description;

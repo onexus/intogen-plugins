@@ -1,11 +1,13 @@
 package org.intogen.decorators.intogen;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.encoding.UrlEncoder;
+import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
@@ -33,7 +35,7 @@ public class IntogenColumnDecorator extends FieldDecorator {
 
         Integer value = (Integer) entity.get(parameters.get(IntogenColumnParameters.FIELD));
 
-        String label = "<span class=\"badge badge-intogen\">IntOGen</span>";
+        String label = "<span class=\"badge badge-intogen\">"+parameters.get(IntogenColumnParameters.TEXT)+"</span>";
 
         if (value != null && value.equals(1) ) {
             LinkPanel linkPanel = new LinkPanel(componentId, label, getLink(LinkPanel.LINK_ID, entity));
@@ -71,6 +73,14 @@ public class IntogenColumnDecorator extends FieldDecorator {
         }
 
         ExternalLink link = new ExternalLink(componentId, url);
+
+        String tooltip = parameters.get(IntogenColumnParameters.TOOLTIP);
+        if (!Strings.isEmpty(tooltip)) {
+            link.add(new AttributeModifier("rel", "tooltip"));
+            link.add(new AttributeModifier("title", tooltip));
+            link.add(new AttributeModifier("data-placement", "bottom"));
+        }
+
         return link;
     }
 
