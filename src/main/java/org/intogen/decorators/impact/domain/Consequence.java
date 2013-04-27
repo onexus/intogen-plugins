@@ -34,8 +34,9 @@ public class Consequence implements Serializable {
 
         IEntity ct = table.getEntity(collectionCT);
 
-        this.snv = String.valueOf(ct.get("CHR")) + ":" +
-                String.valueOf(ct.get("START")) + ":" +
+        boolean old = ct.get("CHROMOSOME") != null;
+        this.snv = String.valueOf(ct.get(old ? "CHROMOSOME" : "CHR")) + ":" +
+                String.valueOf(ct.get(old ? "POSITION" : "START")) + ":" +
                 String.valueOf(ct.get("ALLELE"));
 
         this.transcript = String.valueOf(ct.get("TRANSCRIPT_ID"));
