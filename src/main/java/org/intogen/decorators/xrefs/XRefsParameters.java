@@ -7,7 +7,7 @@ public enum XRefsParameters implements ParameterKey {
 
     INTOGEN_URL("intogen", "IntOGen url", "/web/mutations/v04/browser/mutations", true),
     MUTATIONS("mutations", "Mutations collection to filter", "", true),
-    GENES("genes", "Genes collection to filter", "", false);
+    GENES("genes", "Genes collection to filter", "", true);
 
     private final String key;
     private final String description;

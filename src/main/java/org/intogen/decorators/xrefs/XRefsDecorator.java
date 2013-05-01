@@ -63,6 +63,11 @@ public class XRefsDecorator extends FieldDecorator {
                 }
 
                 if ("I".equalsIgnoreCase(pair[0])) {
+
+                    if (Strings.isEmpty(parameters.get(XRefsParameters.GENES))) {
+                        continue;
+                    }
+
                     text = "<span class=\"badge badge-intogen\">I</span>";
                     link = IntogenColumnDecorator.getUrl(
                             data.getObject(),
@@ -73,7 +78,6 @@ public class XRefsDecorator extends FieldDecorator {
                     title = "mutation seen in IntOGen, click to go to IntOGen to see in which cancer types";
                     target = "";
                 }
-
 
 
                 label.append("<a rel=\"tooltip\" title=\"").append(title);
