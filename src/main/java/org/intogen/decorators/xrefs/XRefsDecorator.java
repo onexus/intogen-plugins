@@ -44,6 +44,7 @@ public class XRefsDecorator extends FieldDecorator {
                 String text = "<span class=\"badge\">?</span>";
                 String title = pair[0] + ": " + pair[1];
                 String link = "";
+                String target = "target=\"_blank\"";
 
                 if ("ESP".equalsIgnoreCase(pair[0])) {
                     text = "<span class=\"badge badge-info\">E</span>";
@@ -51,7 +52,7 @@ public class XRefsDecorator extends FieldDecorator {
                 }
 
                 if ("dbSNP".equalsIgnoreCase(pair[0])) {
-                    text = "<span class=\"badge badge-warning\">S</span>";
+                    text = "<span class=\"badge badge-success\">S</span>";
                     link = "http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=" + pair[1].substring(2);
 
                 }
@@ -59,7 +60,6 @@ public class XRefsDecorator extends FieldDecorator {
                 if ("COSMIC".equalsIgnoreCase(pair[0])) {
                     text = "<span class=\"badge badge-important\">C</span>";
                     link = "http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=" + pair[1].substring(4);
-
                 }
 
                 if ("I".equalsIgnoreCase(pair[0])) {
@@ -70,6 +70,8 @@ public class XRefsDecorator extends FieldDecorator {
                             parameters.get(XRefsParameters.GENES),
                             parameters.get(XRefsParameters.MUTATIONS)
                     );
+                    title = "mutation seen in IntOGen, click to go to IntOGen to see in which cancer types";
+                    target = "";
                 }
 
 
@@ -78,7 +80,7 @@ public class XRefsDecorator extends FieldDecorator {
                 if (Strings.isEmpty(link)) {
                     label.append("\" disabled=\"disabled");
                 }
-                label.append("\" target=\"_blank\" href=\"").append(link).append("\">");
+                label.append("\" ").append(target).append(" href=\"").append(link).append("\">");
                 label.append(text);
                 label.append("</a>&nbsp;");
             }
