@@ -53,7 +53,7 @@ public class IntogenColumnDecorator extends FieldDecorator {
                 entity,
                 parameters.get(IntogenColumnParameters.INTOGEN_URL),
                 parameters.get(IntogenColumnParameters.GENES),
-                parameters.get(IntogenColumnParameters.MUTATIONS)
+                null
         );
 
         ExternalLink link = new ExternalLink(componentId, url);
@@ -80,7 +80,7 @@ public class IntogenColumnDecorator extends FieldDecorator {
         filter = new FilterEntity(new ORI(genes), String.valueOf(gene));
         url = url + "?pf=" + UrlEncoder.QUERY_INSTANCE.encode(filter.toUrlParameter(true, null), "UTF-8");
 
-        if (start != null) {
+        if (mutations != null && start != null) {
             // We are linking the mutations tab
             FilterConfig filterConfig = new FilterConfig();
             filterConfig.setName("Position '" + chr + ":" + start + "'");
