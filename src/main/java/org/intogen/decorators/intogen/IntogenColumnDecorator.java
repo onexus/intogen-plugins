@@ -47,30 +47,14 @@ public class IntogenColumnDecorator extends FieldDecorator {
 
     }
 
-    private AbstractLink getLink(String componentId, IEntity entity) {
+    private AbstractLink getLink(String componentId, IEntity  entity) {
 
-        Object chr = entity.get("CHR");
-        Object start = entity.get("START");
-        Object gene = entity.get("GENE_ID");
-
-        IFilter filter;
-        String url = parameters.get(IntogenColumnParameters.INTOGEN_URL);
-
-        // We are linking the genes
-        filter = new FilterEntity(new ORI(parameters.get(IntogenColumnParameters.GENES)), String.valueOf(gene));
-        url = url + "?pf=" + UrlEncoder.QUERY_INSTANCE.encode(filter.toUrlParameter(true, null), "UTF-8");
-
-        if (start != null) {
-            // We are linking the mutations tab
-            FilterConfig filterConfig = new FilterConfig();
-            filterConfig.setName("Position '" + chr + ":" + start + "'");
-            filterConfig.setCollection(new ORI(parameters.get(IntogenColumnParameters.MUTATIONS)));
-            filterConfig.setDefine("c='"+parameters.get(IntogenColumnParameters.MUTATIONS)+"'");
-            filterConfig.setWhere("c.START='" + start + "' AND c.CHR='" + chr + "'");
-            filter = new BrowserFilter(filterConfig);
-
-            url = url + "&pfc=" + UrlEncoder.QUERY_INSTANCE.encode(filter.toUrlParameter(true, null), "UTF-8");
-        }
+        String url = getUrl(
+                entity,
+                parameters.get(IntogenColumnParameters.INTOGEN_URL),
+                parameters.get(IntogenColumnParameters.GENES),
+                parameters.get(IntogenColumnParameters.MUTATIONS)
+        );
 
         ExternalLink link = new ExternalLink(componentId, url);
 
@@ -82,6 +66,33 @@ public class IntogenColumnDecorator extends FieldDecorator {
         }
 
         return link;
+    }
+
+    public static String getUrl(IEntity entity, String url, String genes, String mutations) {
+
+        Object chr = entity.get("CHR");
+        Object start = entity.get("START");
+        Object gene = entity.get("GENE_ID");
+
+        IFilter filter;
+
+        // We are linking the genes
+        filter = new FilterEntity(new ORI(genes), String.valueOf(gene));
+        url = url + "?pf=" + UrlEncoder.QUERY_INSTANCE.encode(filter.toUrlParameter(true, null), "UTF-8");
+
+        if (start != null) {
+            // We are linking the mutations tab
+            FilterConfig filterConfig = new FilterConfig();
+            filterConfig.setName("Position '" + chr + ":" + start + "'");
+            filterConfig.setCollection(new ORI(mutations));
+            filterConfig.setDefine("c='"+mutations+"'");
+            filterConfig.setWhere("c.START='" + start + "' AND c.CHR='" + chr + "'");
+            filter = new BrowserFilter(filterConfig);
+
+            url = url + "&pfc=" + UrlEncoder.QUERY_INSTANCE.encode(filter.toUrlParameter(true, null), "UTF-8");
+        }
+
+        return url;
     }
 
 }

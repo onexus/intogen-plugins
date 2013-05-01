@@ -16,7 +16,7 @@ public class XRefsDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public ParameterKey[] getParameterKeys() {
-        return new ParameterKey[0];
+        return XRefsParameters.values();
     }
 
     @Override

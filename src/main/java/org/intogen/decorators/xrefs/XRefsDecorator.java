@@ -4,18 +4,21 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.string.Strings;
+import org.intogen.decorators.intogen.IntogenColumnDecorator;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
-import org.onexus.resource.api.ParameterKey;
+import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 
-import java.util.Map;
 import java.util.regex.Pattern;
 
 public class XRefsDecorator extends FieldDecorator {
 
-    public XRefsDecorator(Field field, Map<ParameterKey, String> parameters) {
+    private Parameters parameters;
+
+    public XRefsDecorator(Field field, Parameters parameters) {
         super(field);
+        this.parameters = parameters;
     }
 
     private static Pattern PATTERN_COMMA = Pattern.compile(",");
@@ -58,6 +61,18 @@ public class XRefsDecorator extends FieldDecorator {
                     link = "http://cancer.sanger.ac.uk/cosmic/mutation/overview?id=" + pair[1].substring(4);
 
                 }
+
+                if ("I".equalsIgnoreCase(pair[0])) {
+                    text = "<span class=\"badge badge-important\">I</span>";
+                    link = IntogenColumnDecorator.getUrl(
+                            data.getObject(),
+                            parameters.get(XRefsParameters.INTOGEN_URL),
+                            parameters.get(XRefsParameters.GENES),
+                            parameters.get(XRefsParameters.MUTATIONS)
+                    );
+                }
+
+
 
                 label.append("<a rel=\"tooltip\" title=\"").append(title);
                 if (Strings.isEmpty(link)) {
