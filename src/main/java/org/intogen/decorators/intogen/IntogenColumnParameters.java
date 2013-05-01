@@ -6,7 +6,7 @@ import org.onexus.resource.api.ParameterKey;
 public enum IntogenColumnParameters implements ParameterKey {
 
     INTOGEN_URL("intogen", "IntOGen url", "/web/mutations/v04/browser/mutations", true),
-    FIELD("field", "IntOGen field", "INTOGEN_SIG", true),
+    FIELD("field", "IntOGen field", "INTOGEN_DRIVER", true),
     MUTATIONS("mutations", "Mutations collection to filter", "", true),
     GENES("genes", "Genes collection to filter", "", false),
     TEXT("text", "Text to show into the cell", "IntOGen", true),

@@ -63,7 +63,7 @@ public class XRefsDecorator extends FieldDecorator {
                 }
 
                 if ("I".equalsIgnoreCase(pair[0])) {
-                    text = "<span class=\"badge badge-important\">I</span>";
+                    text = "<span class=\"badge badge-intogen\">I</span>";
                     link = IntogenColumnDecorator.getUrl(
                             data.getObject(),
                             parameters.get(XRefsParameters.INTOGEN_URL),
