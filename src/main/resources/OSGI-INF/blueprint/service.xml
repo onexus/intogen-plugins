@@ -20,4 +20,12 @@
         <bean class="org.intogen.decorators.intogen.IntogenColumnDecoratorCreator"/>
     </service>
 
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.intogen.decorators.tcga.DriverCategoryDecoratorCreator"/>
+    </service>
+
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.intogen.decorators.tcga.DriverEvidenceDecoratorCreator"/>
+    </service>
+
 </blueprint>
