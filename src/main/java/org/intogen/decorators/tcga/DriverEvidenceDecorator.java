@@ -39,10 +39,10 @@ public class DriverEvidenceDecorator extends FieldDecorator {
                 label.append("<span class='badge badge-info' rel='tooltip' title='Gene with clustering bias detected by OncodriveCLUST'>C</span>&nbsp;");
 
             if (oncodrive != null && oncodrive.equals(1))
-                label.append("<span class='badge badge-warning' rel='tooltip' title='Gene with functional impact bias detected by OncodriveFM'>F</span>&nbsp;");
+                label.append("<span class='badge badge-important' rel='tooltip' title='Gene with functional impact bias detected by OncodriveFM'>F</span>&nbsp;");
 
             if (activeDriver != null && activeDriver.equals(1))
-                label.append("<span class='badge badge-important' rel='tooltip' title='Gene with accumulation of mutations in active sites detected by ActiveDriver'>A</span>&nbsp;");
+                label.append("<span class='badge badge-warning' rel='tooltip' title='Gene with accumulation of mutations in active sites detected by ActiveDriver'>A</span>&nbsp;");
 
             if (music != null && music.equals(1))
                 label.append("<span class='badge badge-success' rel='tooltip' title='Gene recurrently mutated detected by MuSiC'>R</span>&nbsp;");

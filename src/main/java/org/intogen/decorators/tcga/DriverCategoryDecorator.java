@@ -29,9 +29,9 @@ public class DriverCategoryDecorator extends FieldDecorator {
 
             String label;
             if (category.trim().equalsIgnoreCase("HCD")) {
-                label = "<span class='label label-info' rel='tooltip' title='High confident novel drivers and known drivers with signs of positive selection'>High Conf Driver</span>";
+                label = "<span class='label label-info' rel='tooltip' title='High Confident Drivers. Contains 291 predicted driver genes favoring specificity over sensitivity'>HCD</span>";
             } else if (category.trim().equalsIgnoreCase("CD")) {
-                label = "<span class='label label-success' rel='tooltip' title='Gene detected by only one method and not in the Cancer Gene Census'>Candidate Driver</span>";
+                label = "<span class='label label-success' rel='tooltip' title='Candidate Drivers. Contains 144 extra genes, forming a more comprehensive list of drivers but with an expectedly higher false-positives rate'>CD</span>";
             } else {
                 label = "<span class='label'>" + category.trim() + "</span>";
             }
