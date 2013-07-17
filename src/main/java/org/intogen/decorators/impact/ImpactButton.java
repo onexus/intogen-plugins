@@ -67,6 +67,10 @@ public class ImpactButton extends Panel {
             return "Low";
         }
 
+        if (val == 9) {
+            return "Unknown";
+        }
+
         return "None";
     }
 
@@ -87,6 +91,10 @@ public class ImpactButton extends Panel {
 
         if (val == 3) {
             return "label label-info";
+        }
+
+        if (val == 9) {
+            return "label";
         }
 
         return "label label-success";
