@@ -99,7 +99,9 @@ public class CtPanel extends Panel {
 
                 if (type == 1 || type == 2) {
                     addField(fields, "Protein", consequence.getProtein(), true);
-                    addField(fields, "Uniprot", consequence.getUniprot(), true);
+                    if (!"null".equalsIgnoreCase(consequence.getUniprot())) {
+                        addField(fields, "Uniprot", consequence.getUniprot(), true);
+                    }
                 }
 
                 if (type == 1) {
