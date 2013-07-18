@@ -28,4 +28,8 @@
         <bean class="org.intogen.decorators.tcga.DriverEvidenceDecoratorCreator"/>
     </service>
 
+    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+        <bean class="org.intogen.decorators.proteinchange.ProteinChangeDecoratorCreator"/>
+    </service>
+
 </blueprint>
