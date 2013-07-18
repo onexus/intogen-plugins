@@ -91,8 +91,8 @@ public class ProteinChangeDecorator extends FieldDecorator {
             return "";
         }
 
-        if (columnValue.equalsIgnoreCase("fs")) {
-            return "<span rel='tooltip' title='Frameshift'>FS</span>";
+        if (columnValue.startsWith("fs")) {
+            return "<span rel='tooltip' title='Frameshift'>"+columnValue+"</span>";
         }
 
         if (columnValue.equalsIgnoreCase("r.spl?")) {
