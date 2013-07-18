@@ -39,6 +39,6 @@ public class ProteinChangeDecoratorCreator implements IDecoratorCreator {
 
     @Override
     public IDecorator createDecorator(Collection collection, Field columnField, Parameters parameters) {
-        return new ProteinChangeDecorator(columnField, parameters);
+        return new ProteinChangeDecorator(columnField);
     }
 }

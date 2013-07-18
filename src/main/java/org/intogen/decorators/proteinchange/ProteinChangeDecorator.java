@@ -26,7 +26,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
-import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 
 import java.util.ArrayList;
@@ -35,11 +34,9 @@ import java.util.List;
 
 public class ProteinChangeDecorator extends FieldDecorator {
 
-    private Parameters parameters;
 
-    public ProteinChangeDecorator(Field field, Parameters parameters) {
+    public ProteinChangeDecorator(Field field) {
         super(field);
-        this.parameters = parameters;
     }
 
     @Override
@@ -53,7 +50,7 @@ public class ProteinChangeDecorator extends FieldDecorator {
             String currentColumnValue = String.valueOf(entity.get(getField().getId()));
 
             List<String> columnValues = new ArrayList<String>();
-            for (String value : currentColumnValue.split(parameters.get(org.onexus.website.api.widgets.tableviewer.decorators.list.ListDecoratorParameters.SEPARATOR).trim())) {
+            for (String value : currentColumnValue.split(",")) {
                 columnValues.add(value.trim());
             }
 
