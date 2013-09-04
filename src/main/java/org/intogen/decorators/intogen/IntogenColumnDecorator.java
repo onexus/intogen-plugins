@@ -12,10 +12,10 @@ import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Parameters;
-import org.onexus.website.api.pages.browser.FilterEntity;
-import org.onexus.website.api.pages.browser.IFilter;
-import org.onexus.website.api.widgets.filters.BrowserFilter;
-import org.onexus.website.api.widgets.filters.FilterConfig;
+import org.onexus.website.api.pages.browser.IEntitySelection;
+import org.onexus.website.api.pages.browser.SingleEntitySelection;
+import org.onexus.website.api.widgets.selection.BrowserEntitySelection;
+import org.onexus.website.api.widgets.selection.FilterConfig;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.LinkPanel;
 
@@ -74,10 +74,10 @@ public class IntogenColumnDecorator extends FieldDecorator {
         Object start = entity.get("START");
         Object gene = entity.get("GENE_ID");
 
-        IFilter filter;
+        IEntitySelection filter;
 
         // We are linking the genes
-        filter = new FilterEntity(new ORI(genes), String.valueOf(gene));
+        filter = new SingleEntitySelection(new ORI(genes), String.valueOf(gene));
         url = url + "?pf=" + UrlEncoder.QUERY_INSTANCE.encode(filter.toUrlParameter(true, null), "UTF-8");
 
         if (mutations != null && start != null) {
@@ -87,7 +87,7 @@ public class IntogenColumnDecorator extends FieldDecorator {
             filterConfig.setCollection(new ORI(mutations));
             filterConfig.setDefine("c='"+mutations+"'");
             filterConfig.setWhere("c.START='" + start + "' AND c.CHR='" + chr + "'");
-            filter = new BrowserFilter(filterConfig);
+            filter = new BrowserEntitySelection(filterConfig);
 
             url = url + "&pfc=" + UrlEncoder.QUERY_INSTANCE.encode(filter.toUrlParameter(true, null), "UTF-8");
         }
