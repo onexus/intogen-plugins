@@ -14,8 +14,8 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.pages.browser.IEntitySelection;
 import org.onexus.website.api.pages.browser.SingleEntitySelection;
-import org.onexus.website.api.widgets.selection.BrowserEntitySelection;
 import org.onexus.website.api.widgets.selection.FilterConfig;
+import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.LinkPanel;
 
@@ -87,7 +87,7 @@ public class IntogenColumnDecorator extends FieldDecorator {
             filterConfig.setCollection(new ORI(mutations));
             filterConfig.setDefine("c='"+mutations+"'");
             filterConfig.setWhere("c.START='" + start + "' AND c.CHR='" + chr + "'");
-            filter = new BrowserEntitySelection(filterConfig);
+            filter = new MultipleEntitySelection(filterConfig);
 
             url = url + "&pfc=" + UrlEncoder.QUERY_INSTANCE.encode(filter.toUrlParameter(true, null), "UTF-8");
         }
