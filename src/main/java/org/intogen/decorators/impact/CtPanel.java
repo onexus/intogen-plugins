@@ -13,8 +13,8 @@ import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.Parameters;
 import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
-import org.ops4j.pax.wicket.api.PaxWicketBean;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CtPanel extends Panel {
 
-    @PaxWicketBean(name = "collectionManager")
+    @Inject
     private ICollectionManager collectionManager;
 
     public CtPanel(String id, IEntity entity, Parameters parameters) {
@@ -41,9 +41,9 @@ public class CtPanel extends Panel {
             String snvArray[] = snv.split(":");
 
             snvItem.add(new Label("snv", snv));
-            snvItem.add(new WebMarkupContainer("snv_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Location/View?r="+snvArray[0]+"%3A"+snvArray[1]+"-"+snvArray[1])));
+            snvItem.add(new WebMarkupContainer("snv_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Location/View?r=" + snvArray[0] + "%3A" + snvArray[1] + "-" + snvArray[1])));
             snvItem.add(new Label("ensembl", mutation.getEnsembl()));
-            snvItem.add(new WebMarkupContainer("ensembl_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Gene/Summary?g="+mutation.getEnsembl())));
+            snvItem.add(new WebMarkupContainer("ensembl_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" + mutation.getEnsembl())));
 
             RepeatingView consquencesContainer = new RepeatingView("consequences");
 
@@ -86,8 +86,8 @@ public class CtPanel extends Panel {
                 if (ct.contains("missense_variant")) {
                     type = 1;
                 } else if (ct.contains("framseshift_variant") ||
-                            ct.contains("synonymous_variant") ||
-                            ct.contains("stop_gained")
+                        ct.contains("synonymous_variant") ||
+                        ct.contains("stop_gained")
                         ) {
                     type = 2;
                 }
@@ -106,11 +106,11 @@ public class CtPanel extends Panel {
 
                 if (type == 1) {
                     addField(fields, "AA change", consequence.getAachange(), true);
-                    addField(fields, "Protein position", consequence.getProteinPosition(),true);
+                    addField(fields, "Protein position", consequence.getProteinPosition(), true);
                 }
 
                 if (type == 2 || type == 0) {
-                    addField(fields,  "Impact", createClassLabel(consequence.getImpact()), false);
+                    addField(fields, "Impact", createClassLabel(consequence.getImpact()), false);
                 }
 
                 // Table

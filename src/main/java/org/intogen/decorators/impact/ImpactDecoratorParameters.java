@@ -49,8 +49,6 @@ public enum ImpactDecoratorParameters implements ParameterKey {
     }
 
 
-
-
 }
 
 

@@ -11,7 +11,10 @@ import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Parameters;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 
 public class Mutation implements Serializable {
@@ -48,21 +51,21 @@ public class Mutation implements Serializable {
         // Load mutation values
         this.collectionUri = entity.getCollection().getORI();
 
-        Object value = entity.get( fieldChr );
+        Object value = entity.get(fieldChr);
         if (value != null) {
             this.chromosome = String.valueOf(value);
         }
 
-        if ((value = entity.get( fieldPosition )) != null) {
-            this.position = Long.valueOf( String.valueOf(value));
+        if ((value = entity.get(fieldPosition)) != null) {
+            this.position = Long.valueOf(String.valueOf(value));
         }
 
         if ((value = entity.get(fieldAllele)) != null) {
-            this.allele = String.valueOf( value );
+            this.allele = String.valueOf(value);
         }
 
         if ((value = entity.get(fieldGeneid)) != null) {
-            this.ensembl = String.valueOf( value );
+            this.ensembl = String.valueOf(value);
         }
 
         project = new ORI(collectionUri.getProjectUrl(), null);
@@ -86,22 +89,22 @@ public class Mutation implements Serializable {
         query.setFrom(fromAlias);
         query.addSelect(fromAlias, null);
 
-        if (getPosition()!=null) {
+        if (getPosition() != null) {
             query.setWhere(new And(new Equal(fromAlias, fieldChr, getChromosome()),
-                new And(new Equal(fromAlias, fieldPosition, getPosition()),
-                        new And(new Equal(fromAlias, fieldAllele, getAllele()),
-                                new Equal(fromAlias, fieldGeneid, ensembl)
-                        ))));
+                    new And(new Equal(fromAlias, fieldPosition, getPosition()),
+                            new And(new Equal(fromAlias, fieldAllele, getAllele()),
+                                    new Equal(fromAlias, fieldGeneid, ensembl)
+                            ))));
         } else {
             String cellLine = String.valueOf(entity.get("CELLLINEID"));
             String cancerSite = String.valueOf(entity.get("PROJECTID"));
             query.setWhere(
                     new And(
-                        new Equal(fromAlias, "PROJECTID", cancerSite),
-                    new And(
-                        new Equal(fromAlias, fieldGeneid, ensembl),
-                        new Equal(fromAlias, "SAMPLEID", cellLine)
-                    ))
+                            new Equal(fromAlias, "PROJECTID", cancerSite),
+                            new And(
+                                    new Equal(fromAlias, fieldGeneid, ensembl),
+                                    new Equal(fromAlias, "SAMPLEID", cellLine)
+                            ))
             );
         }
 
@@ -114,7 +117,6 @@ public class Mutation implements Serializable {
             consequences.get(ct.getSnv()).add(ct);
         }
     }
-
 
 
     private Query getExtraQuery() {

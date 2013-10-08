@@ -45,8 +45,6 @@ public enum IntogenColumnParameters implements ParameterKey {
     }
 
 
-
-
 }
 
 

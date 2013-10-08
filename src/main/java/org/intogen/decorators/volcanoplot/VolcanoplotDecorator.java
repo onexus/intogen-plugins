@@ -26,13 +26,13 @@ public class VolcanoplotDecorator extends FieldDecorator {
         Double pvalue = (Double) entity.get("PVALUE");
         Double significane = (Double) entity.get("VOLCANOPLOT");
 
-        if (pvalue!=null && pvalue < 0.02) {
+        if (pvalue != null && pvalue < 0.02) {
             boolean red = false;
-            if (significane!=null && significane > 1) {
+            if (significane != null && significane > 1) {
                 red = true;
             }
 
-            cellContainer.add(new AttributeModifier("style", Model.of("color: #FFFFFF; background-color: " + (red?"#990000":"#009900"))));
+            cellContainer.add(new AttributeModifier("style", Model.of("color: #FFFFFF; background-color: " + (red ? "#990000" : "#009900"))));
         }
 
 

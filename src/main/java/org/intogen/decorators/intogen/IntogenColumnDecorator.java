@@ -35,9 +35,9 @@ public class IntogenColumnDecorator extends FieldDecorator {
 
         Integer value = (Integer) entity.get(parameters.get(IntogenColumnParameters.FIELD));
 
-        String label = "<span class=\"badge badge-intogen\">"+parameters.get(IntogenColumnParameters.TEXT)+"</span>";
+        String label = "<span class=\"badge badge-intogen\">" + parameters.get(IntogenColumnParameters.TEXT) + "</span>";
 
-        if (value != null && value.equals(1) ) {
+        if (value != null && value.equals(1)) {
             LinkPanel linkPanel = new LinkPanel(componentId, label, getLink(LinkPanel.LINK_ID, entity));
             linkPanel.setEscapeModelStrings(false);
             cellContainer.add(linkPanel);
@@ -47,7 +47,7 @@ public class IntogenColumnDecorator extends FieldDecorator {
 
     }
 
-    private AbstractLink getLink(String componentId, IEntity  entity) {
+    private AbstractLink getLink(String componentId, IEntity entity) {
 
         String url = getUrl(
                 entity,
@@ -85,7 +85,7 @@ public class IntogenColumnDecorator extends FieldDecorator {
             FilterConfig filterConfig = new FilterConfig();
             filterConfig.setName("Position '" + chr + ":" + start + "'");
             filterConfig.setCollection(new ORI(mutations));
-            filterConfig.setDefine("c='"+mutations+"'");
+            filterConfig.setDefine("c='" + mutations + "'");
             filterConfig.setWhere("c.START='" + start + "' AND c.CHR='" + chr + "'");
             filter = new MultipleEntitySelection(filterConfig);
 

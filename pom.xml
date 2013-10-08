@@ -10,7 +10,7 @@
     <packaging>bundle</packaging>
 
     <properties>
-        <onexus.version>0.3.0-SNAPSHOT</onexus.version>
+        <onexus.version>0.4.0-SNAPSHOT</onexus.version>
         <bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>
     </properties>
 
@@ -30,17 +30,6 @@
             <version>${onexus.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.ops4j.pax.wicket</groupId>
-            <artifactId>org.ops4j.pax.wicket.service</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-core</artifactId>
-            <version>6.7.0</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -84,35 +73,6 @@
                         <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
                         <Bundle-Version>${pom.version}</Bundle-Version>
                         <DynamicImport-Package>*</DynamicImport-Package>
-                        <Import-Package>
-                            org.apache.wicket,
-                            org.apache.wicket.util,
-                            org.apache.wicket.event,
-                            org.apache.wicket.page,
-                            org.apache.wicket.request.resource,
-                            org.apache.wicket.request.mapper,
-                            org.apache.wicket.request.cycle,
-                            org.apache.wicket.markup.html,
-                            org.apache.wicket.markup.html.basic,
-                            org.apache.wicket.protocol.http,
-                            org.apache.wicket.request.http,
-                            org.ops4j.pax.wicket.api,
-                            org.ops4j.pax.wicket.util,
-                            org.ops4j.pax.wicket.util.proxy,
-                            org.osgi.framework,
-                            net.sf.cglib.proxy;version="[2,3)",
-                            net.sf.cglib.core;version="[2,3)",
-                            net.sf.cglib.reflect;version="[2,3)",
-                            javax.servlet,
-                            org.apache.wicket.settings,
-                            org.apache.wicket.session,
-                            org.apache.wicket.util.file,
-                            org.apache.wicket.request,
-                            javax.servlet.http,
-                            org.apache.wicket.ajax,
-                            org.osgi.service.blueprint,
-                            org.apache.wicket.core.request.mapper
-                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
@@ -130,14 +90,4 @@
         </plugins>
 
     </build>
-
-    <repositories>
-        <repository>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <id>onexus-public</id>
-            <url>http://repo.onexus.org/nexus/content/groups/public</url>
-        </repository>
-    </repositories>
 </project>

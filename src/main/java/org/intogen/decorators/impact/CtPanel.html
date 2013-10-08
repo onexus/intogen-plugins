@@ -1,65 +1,68 @@
 <html xmlns:wicket>
 <wicket:panel>
-	<div wicket:id="boxes">
+    <div wicket:id="boxes">
 
-		<dl class="dl-horizontal">
-			<dt>SNV</dt>
-			<dd><span  wicket:id="snv"></span> <a href="" wicket:id="snv_link" target="_tab"><i class="icon-share"></i></a> </dd>
-			<dt>Gene</dt>
-			<dd><span wicket:id="ensembl"></span> <a href="" wicket:id="ensembl_link" target="_tab"><i class="icon-share"></i></a> </dd>
-		</dl>
+        <dl class="dl-horizontal">
+            <dt>SNV</dt>
+            <dd><span wicket:id="snv"></span> <a href="" wicket:id="snv_link" target="_tab"><i
+                    class="icon-share"></i></a></dd>
+            <dt>Gene</dt>
+            <dd><span wicket:id="ensembl"></span> <a href="" wicket:id="ensembl_link" target="_tab"><i
+                    class="icon-share"></i></a></dd>
+        </dl>
 
-		<div class="accordion-group" wicket:id="consequences">
+        <div class="accordion-group" wicket:id="consequences">
 
-			<div class="accordion-heading">
-				<a href="#box0" class="accordion-toggle" data-toggle="collapse" data-parent="#boxes"
-				   wicket:id="accordion-toggle"><span wicket:id="label">TP53INP1</span></a>
-			</div>
-			<div wicket:id="accordion-body" id="box0" class="accordion-body collapse">
+            <div class="accordion-heading">
+                <a href="#box0" class="accordion-toggle" data-toggle="collapse" data-parent="#boxes"
+                   wicket:id="accordion-toggle"><span wicket:id="label">TP53INP1</span></a>
+            </div>
+            <div wicket:id="accordion-body" id="box0" class="accordion-body collapse">
 
-				<dl class="dl-horizontal">
+                <dl class="dl-horizontal">
                     <span wicket:id="fields">
                         <dt wicket:id="title">Protein</dt>
 					    <dd wicket:id="value">PTPRJ</dd>
                     </span>
-					<dt></dt>
-					<dd wicket:id="table">
-						<table>
-							<thead>
-							<tr>
-								<th>&nbsp;</th>
-								<th>class</th>
-								<th>score</th>
-								<th>transFIC<a href="http://bg.upf.edu/transfic" target="_blank"><i class="icon-question-sign"></i></a></th>
-							</tr>
-							</thead>
+                    <dt></dt>
+                    <dd wicket:id="table">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>class</th>
+                                <th>score</th>
+                                <th>transFIC<a href="http://bg.upf.edu/transfic" target="_blank"><i
+                                        class="icon-question-sign"></i></a></th>
+                            </tr>
+                            </thead>
 
-							<tbody>
-							<tr>
-								<td>SIFT</td>
-								<td wicket:id="siftClass"></td>
-								<td wicket:id="siftScore"></td>
-								<td wicket:id="siftTrans"></td>
-							</tr>
-							<tr>
-								<td>PPH2</td>
-								<td wicket:id="pph2Class"></td>
-								<td wicket:id="pph2Score"></td>
-								<td wicket:id="pph2Trans"></td>
-							</tr>
-							<tr>
-								<td>MA</td>
-								<td wicket:id="maClass"></td>
-								<td wicket:id="maScore"></td>
-								<td wicket:id="maTrans"></td>
-							</tr>
-							</tbody>
-						</table>
-					</dd>
-				</dl>
-			</div>
+                            <tbody>
+                            <tr>
+                                <td>SIFT</td>
+                                <td wicket:id="siftClass"></td>
+                                <td wicket:id="siftScore"></td>
+                                <td wicket:id="siftTrans"></td>
+                            </tr>
+                            <tr>
+                                <td>PPH2</td>
+                                <td wicket:id="pph2Class"></td>
+                                <td wicket:id="pph2Score"></td>
+                                <td wicket:id="pph2Trans"></td>
+                            </tr>
+                            <tr>
+                                <td>MA</td>
+                                <td wicket:id="maClass"></td>
+                                <td wicket:id="maScore"></td>
+                                <td wicket:id="maTrans"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </dd>
+                </dl>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 </wicket:panel>
 </html>
