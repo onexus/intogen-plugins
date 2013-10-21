@@ -43,6 +43,12 @@ public class CtPanel extends Panel {
             snvItem.add(new Label("snv", snv));
             snvItem.add(new WebMarkupContainer("snv_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Location/View?r=" + snvArray[0] + "%3A" + snvArray[1] + "-" + snvArray[1])));
             snvItem.add(new Label("ensembl", mutation.getEnsembl()));
+            snvItem.add(new Label("symbol", mutation.getSymbol()));
+
+            Label button = new Label("impact", ImpactButton.impactToLabel(mutation.getImpact()));
+            button.add(new AttributeModifier("class", ImpactButton.impactToLabelClass(mutation.getImpact())));
+            snvItem.add(button);
+
             snvItem.add(new WebMarkupContainer("ensembl_link").add(new AttributeModifier("href", "http://www.ensembl.org/Homo_sapiens/Gene/Summary?g=" + mutation.getEnsembl())));
 
             RepeatingView consquencesContainer = new RepeatingView("consequences");
@@ -71,7 +77,7 @@ public class CtPanel extends Panel {
                 item.add(accordionBody);
 
                 // Label
-                String label = createClassLabel(consequence.getImpact());
+                String label = createLabelSpan(consequence.getImpact());
                 label = label + "&nbsp;&nbsp;" + String.valueOf(consequence.getTranscript());
                 if (!Strings.isEmpty(consequence.getUniprot()) && !"null".equals(consequence.getUniprot())) {
                     label = label + " (" + consequence.getUniprot() + ")";
@@ -110,7 +116,7 @@ public class CtPanel extends Panel {
                 }
 
                 if (type == 2 || type == 0) {
-                    addField(fields, "Impact", createClassLabel(consequence.getImpact()), false);
+                    addField(fields, "Impact", createLabelSpan(consequence.getImpact()), false);
                 }
 
                 // Table
@@ -146,6 +152,14 @@ public class CtPanel extends Panel {
 
     }
 
+    private static String createLabelSpan(Object impact) {
+        return "<span class=\"" +
+                ImpactButton.impactToLabelClass(impact) +
+                "\">" +
+                ImpactButton.impactToLabel(impact) +
+                "</span>";
+    }
+
     private static String createClassLabel(String className) {
 
         if (className == null || Strings.isEmpty(className)) {
@@ -168,25 +182,13 @@ public class CtPanel extends Panel {
 
     }
 
-    private static Integer impactToInteger(String className) {
+    private static Integer impactToInteger(Object impact) {
 
-        if (className == null || Strings.isEmpty(className)) {
-            return 0;
+        if (impact instanceof Integer) {
+            return (Integer) impact;
         }
 
-        if (className.equals("low")) {
-            return 1;
-        }
-
-        if (className.equals("medium")) {
-            return 2;
-        }
-
-        if (className.equals("high")) {
-            return 3;
-        }
-
-        return 0;
+        return 6;
 
     }
 }

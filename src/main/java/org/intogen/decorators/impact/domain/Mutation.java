@@ -9,6 +9,7 @@ import org.onexus.collection.api.query.Equal;
 import org.onexus.collection.api.query.Query;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Parameters;
+import org.onexus.website.api.utils.EntityModel;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ public class Mutation implements Serializable {
     // Extra mutation fields
     private String externalId;
     private String symbol;
+    private Object impact;
     private Integer recurrence;
     private Integer samples;
     private Double frequency;
@@ -47,6 +49,8 @@ public class Mutation implements Serializable {
         String fieldPosition = parameters.get(ImpactDecoratorParameters.FIELD_POSITION);
         String fieldAllele = parameters.get(ImpactDecoratorParameters.FIELD_ALLELE);
         String fieldGeneid = parameters.get(ImpactDecoratorParameters.FIELD_GENEID);
+        String fieldImpact = parameters.get(ImpactDecoratorParameters.FIELD_IMPACT);
+
 
         // Load mutation values
         this.collectionUri = entity.getCollection().getORI();
@@ -64,17 +68,22 @@ public class Mutation implements Serializable {
             this.allele = String.valueOf(value);
         }
 
-        if ((value = entity.get(fieldGeneid)) != null) {
-            this.ensembl = String.valueOf(value);
-        }
+        this.impact = entity.get(fieldImpact);
 
         project = new ORI(collectionUri.getProjectUrl(), null);
-        genesCollection = new ORI(collectionUri.getProjectUrl(), parameters.get(ImpactDecoratorParameters.COLLECTION_GENES));
+        genesCollection = new ORI(parameters.get(ImpactDecoratorParameters.COLLECTION_GENES));
         ctCollection = new ORI(collectionUri.getProjectUrl(), parameters.get(ImpactDecoratorParameters.COLLECTION_CT));
+
+        if ((value = entity.get(fieldGeneid)) != null) {
+            this.ensembl = String.valueOf(value);
+
+            IEntity gene = new EntityModel(genesCollection, this.ensembl).getObject();
+            Object symbol = gene.get("SYMBOL");
+            this.symbol = (symbol == null ? "" : "(" + String.valueOf(symbol) + ")");
+        }
 
         //TODO Load mutation extra query
         this.externalId = "";
-        this.symbol = "";
         this.recurrence = 0;
         this.samples = 0;
         this.frequency = 0.0;
@@ -174,5 +183,9 @@ public class Mutation implements Serializable {
 
     public String getSymbol() {
         return symbol;
+    }
+
+    public Object getImpact() {
+        return impact;
     }
 }
