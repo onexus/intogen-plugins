@@ -59,6 +59,6 @@ public class DriverEvidenceDecorator extends FieldDecorator {
 
     @Override
     public List<String> getExtraFields(Collection collection) {
-        return Arrays.asList("COUNT", "ONCODRIVE", "ONCOCLUST", "ACTIVE_DRIVER");
+        return Arrays.asList("COUNT", "ONCODRIVE", "ONCOCLUST", "ACTIVE_DRIVER", "MUSIC", "MUTSIG");
     }
 }
