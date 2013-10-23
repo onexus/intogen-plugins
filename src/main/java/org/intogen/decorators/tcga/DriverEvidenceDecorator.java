@@ -4,11 +4,14 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.model.IModel;
+import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ParameterKey;
 import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class DriverEvidenceDecorator extends FieldDecorator {
@@ -54,4 +57,8 @@ public class DriverEvidenceDecorator extends FieldDecorator {
         }
     }
 
+    @Override
+    public List<String> getExtraFields(Collection collection) {
+        return Arrays.asList("COUNT", "ONCODRIVE", "ONCOCLUST", "ACTIVE_DRIVER");
+    }
 }
