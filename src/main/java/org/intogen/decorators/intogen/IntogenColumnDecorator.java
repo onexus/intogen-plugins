@@ -12,12 +12,12 @@ import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.ORI;
 import org.onexus.resource.api.Parameters;
-import org.onexus.website.api.pages.browser.IEntitySelection;
-import org.onexus.website.api.pages.browser.SingleEntitySelection;
-import org.onexus.website.api.widgets.selection.FilterConfig;
-import org.onexus.website.api.widgets.selection.MultipleEntitySelection;
-import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
-import org.onexus.website.api.widgets.tableviewer.decorators.utils.LinkPanel;
+import org.onexus.website.api.FilterConfig;
+import org.onexus.website.api.IEntitySelection;
+import org.onexus.website.api.MultipleEntitySelection;
+import org.onexus.website.api.SingleEntitySelection;
+import org.onexus.website.widget.tableviewer.decorators.utils.FieldDecorator;
+import org.onexus.website.widget.tableviewer.decorators.utils.LinkPanel;
 
 public class IntogenColumnDecorator extends FieldDecorator {
 

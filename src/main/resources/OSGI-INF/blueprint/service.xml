@@ -4,31 +4,31 @@
 
     <reference id="collectionManager" interface="org.onexus.collection.api.ICollectionManager"/>
 
-    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+    <service interface="org.onexus.website.widget.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.intogen.decorators.impact.ImpactDecoratorCreator"/>
     </service>
 
-    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+    <service interface="org.onexus.website.widget.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.intogen.decorators.volcanoplot.VolcanoplotDecoratorCreator"/>
     </service>
 
-    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+    <service interface="org.onexus.website.widget.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.intogen.decorators.xrefs.XRefsDecoratorCreator"/>
     </service>
 
-    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+    <service interface="org.onexus.website.widget.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.intogen.decorators.intogen.IntogenColumnDecoratorCreator"/>
     </service>
 
-    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+    <service interface="org.onexus.website.widget.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.intogen.decorators.tcga.DriverCategoryDecoratorCreator"/>
     </service>
 
-    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+    <service interface="org.onexus.website.widget.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.intogen.decorators.tcga.DriverEvidenceDecoratorCreator"/>
     </service>
 
-    <service interface="org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator">
+    <service interface="org.onexus.website.widget.tableviewer.decorators.IDecoratorCreator">
         <bean class="org.intogen.decorators.proteinchange.ProteinChangeDecoratorCreator"/>
     </service>
 

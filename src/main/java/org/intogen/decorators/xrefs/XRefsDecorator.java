@@ -8,7 +8,7 @@ import org.intogen.decorators.intogen.IntogenColumnDecorator;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.Parameters;
-import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
+import org.onexus.website.widget.tableviewer.decorators.utils.FieldDecorator;
 
 import java.util.regex.Pattern;
 

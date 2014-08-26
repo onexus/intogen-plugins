@@ -12,7 +12,7 @@ import org.intogen.decorators.impact.domain.Mutation;
 import org.onexus.collection.api.ICollectionManager;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.Parameters;
-import org.onexus.website.api.widgets.tableviewer.formaters.DoubleFormater;
+import org.onexus.website.widget.tableviewer.formaters.DoubleFormater;
 
 import javax.inject.Inject;
 import java.util.ArrayList;

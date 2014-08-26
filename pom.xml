@@ -10,7 +10,7 @@
     <packaging>bundle</packaging>
 
     <properties>
-        <onexus.version>0.4.0-SNAPSHOT</onexus.version>
+        <onexus.version>0.5.0-SNAPSHOT</onexus.version>
         <bundle.symbolicName>${groupId}.${artifactId}</bundle.symbolicName>
     </properties>
 
@@ -27,6 +27,12 @@
         <dependency>
             <groupId>org.onexus</groupId>
             <artifactId>org.onexus.website.api</artifactId>
+            <version>${onexus.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onexus</groupId>
+            <artifactId>org.onexus.website.widget</artifactId>
             <version>${onexus.version}</version>
         </dependency>
 

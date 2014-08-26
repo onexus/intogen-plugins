@@ -26,7 +26,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.util.string.Strings;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
-import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
+import org.onexus.website.widget.tableviewer.decorators.utils.FieldDecorator;
 
 import java.util.ArrayList;
 import java.util.Iterator;

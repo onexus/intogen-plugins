@@ -8,12 +8,10 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.collection.api.IEntity;
 import org.onexus.resource.api.Parameters;
-import org.onexus.website.api.widgets.tableviewer.decorators.utils.FieldDecorator;
+import org.onexus.website.widget.tableviewer.decorators.utils.FieldDecorator;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ImpactDecorator extends FieldDecorator {
 

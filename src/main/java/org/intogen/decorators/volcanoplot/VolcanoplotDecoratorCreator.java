@@ -4,8 +4,8 @@ import org.onexus.collection.api.Collection;
 import org.onexus.collection.api.Field;
 import org.onexus.resource.api.ParameterKey;
 import org.onexus.resource.api.Parameters;
-import org.onexus.website.api.widgets.tableviewer.decorators.IDecorator;
-import org.onexus.website.api.widgets.tableviewer.decorators.IDecoratorCreator;
+import org.onexus.website.widget.tableviewer.decorators.IDecorator;
+import org.onexus.website.widget.tableviewer.decorators.IDecoratorCreator;
 
 public class VolcanoplotDecoratorCreator implements IDecoratorCreator {
 
